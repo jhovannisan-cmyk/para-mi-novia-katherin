@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Felices 3 Meses, Mi Amor! 💜</title>
+    <style>
+        :root {
+            --bg-primary: #3b0714;
+            --bg-secondary: #581c1c;
+            --accent-wine: #991b1b;
+            --dark-wine: #2a080c;
+            --light-wine: #fecdd3;
+            --text-color: #fff1f2;
+            --btn-hover: #b91c1c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 15px;
+        }
+
+        #fx-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(254, 205, 211, 0.15);
+            font-size: 24px;
+            animation: floatUp 6s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            background: rgba(42, 8, 12, 0.90);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(153, 27, 27, 0.4);
+            width: 100%;
+            max-width: 650px;
+            text-align: center;
+            border: 2px solid rgba(244, 63, 94, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 40px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: #fca5a5;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background-color: var(--accent-wine);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(153, 27, 27, 0.6);
+            transition: all 0.2s ease;
+            font-weight: bold;
+            margin: 8px;
+        }
+
+        .btn:hover {
+            background-color: var(--btn-hover);
+            transform: translateY(-2px);
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .question-btn {
+            background: rgba(88, 28, 28, 0.8);
+            color: #ffe4e6;
+            border: 2px solid #f43f5e;
+            padding: 14px 20px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: clamp(0.95rem, 2vw, 1.05rem);
+            font-weight: 600;
+            width: 100%;
+            max-width: 450px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            word-break: break-word;
+        }
+
+        .question-btn:hover {
+            background: rgba(153, 27, 27, 0.8);
+            transform: scale(1.02);
+        }
+
+        /* Burbuja de Diálogo RPG Inferior */
+        .rpg-dialogue-box {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 600px;
+            background: rgba(30, 5, 8, 0.98);
+            border: 3px solid #f43f5e;
+            border-radius: 16px;
+            padding: 20px;
+            color: #ffe4e6;
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+            z-index: 1000;
+            display: none;
+            text-align: left;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .rpg-dialogue-box::after {
+            content: '▼ Presiona Espacio o Enter / Toca aquí';
+            display: block;
+            font-size: 0.75rem;
+            color: #fda4af;
+            text-align: right;
+            margin-top: 10px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fx-canvas"></canvas>
+    <div class="floating-hearts" id="heartsContainer"></div>
+
+    <div class="rpg-dialogue-box" id="rpgDialogueBox" onclick="advanceDialogue()">
+        <p id="rpgDialogueText">Texto de diálogo aquí...</p>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <!-- Introducción -->
+        <div id="intro-screen">
+            <h1>Felices 3 Meses, Mi Amor</h1>
+            <p>He preparado esta pequeña sorpresa interactiva solo para ti. ¿Estás lista para responder este cuestionario especial?</p>
+            <button class="btn" onclick="startQuiz()">Comenzar</button>
+        </div>
+
+        <!-- Cuestionario -->
+        <div id="quiz-screen" style="display: none;">
+            <h2 id="question-title" style="color: #fca5a5; margin-bottom: 15px;">Pregunta 1</h2>
+            <p id="question-text" style="font-weight: 500;"></p>
+            <div class="options-container" id="quiz-options"></div>
+        </div>
+
+        <!-- Pantalla Final -->
+        <div id="ending-screen" style="display: none;">
+            <h1 id="ending-title">Te Amo Demasiado</h1>
+            <p id="ending-text">Gracias por estos hermosos 3 meses llenos de risas, amor y momentos increíbles a tu lado. ¡Eres lo mejor que me ha pasado!</p>
+            <button class="btn" onclick="location.reload()">Volver a Jugar</button>
+        </div>
+    </div>
+
+    <script>
+        // --- SINTETIZADOR DE AUDIO SUTIL ---
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSubtleSound(type) {
+            initAudio();
+            if (!audioCtx) return;
+            let now = audioCtx.currentTime;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'harp') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.5);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+                osc.start(now);
+                osc.stop(now + 0.6);
+            } else if (type === 'sparkle') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.linearRampToValueAtTime(600, now + 0.4);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'ecg_beep') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(650, now);
+                gain.gain.setValueAtTime(0.06, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            }
+        }
+
+        // --- SISTEMA DE LIENZO Y EFECTOS TRASEROS ---
+        const canvas = document.getElementById('fx-canvas');
+        const ctx = canvas.getContext('2d');
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let particles = [];
+        let rowOffset = 0;
+        let activeRowTimer = 0; 
+        let neonHearts = []; 
+
+        function launchMultipleHeartFireworks() {
+            let count = Math.floor(Math.random() * 10) + 15;
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    playSubtleSound('sparkle');
+                    let startX = window.innerWidth * (0.1 + Math.random() * 0.8);
+                    let startY = window.innerHeight * 0.85;
+                    let targetX = startX + (Math.random() * 120 - 60);
+                    let targetY = window.innerHeight * (0.15 + Math.random() * 0.4);
+
+                    let currentY = startY;
+                    let rocket = setInterval(() => {
+                        currentY -= 20;
+                        if (currentY <= targetY) {
+                            clearInterval(rocket);
+                            explodeHeartShape(targetX, targetY);
+                        }
+                    }, 22);
+                }, i * 90);
+            }
+        }
+
+        function explodeHeartShape(x, y) {
+            for (let i = 0; i < 50; i++) {
+                let t = (i / 50) * Math.PI * 2;
+                let vx = 15 * Math.pow(Math.sin(t), 3);
+                let vy = -(12 * Math.cos(t) - 4 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: vx * 0.22,
+                    vy: vy * 0.22,
+                    alpha: 1,
+                    color: ['#f43f5e', '#fb7185', '#fda4af', '#fecdd3'][Math.floor(Math.random()*4)]
+                });
+            }
+        }
+
+        function triggerRowEvent() {
+            activeRowTimer = 480; 
+        }
+
+        function triggerNeonHeartsEvent() {
+            playSubtleSound('harp');
+            neonHearts = [];
+            let count = Math.floor(Math.random() * 2) + 3;
+            let positions = [
+                {x: window.innerWidth * 0.15, y: window.innerHeight * 0.3},
+                {x: window.innerWidth * 0.85, y: window.innerHeight * 0.3},
+                {x: window.innerWidth * 0.20, y: window.innerHeight * 0.7},
+                {x: window.innerWidth * 0.80, y: window.innerHeight * 0.7}
+            ];
+            positions.sort(() => Math.random() - 0.5);
+
+            for (let i = 0; i < count; i++) {
+                neonHearts.push({
+                    x: positions[i].x,
+                    y: positions[i].y,
+                    scale: 0,
+                    alpha: 1,
+                    timer: 140
+                });
+            }
+        }
+
+        function scheduleNextEvent() {
+            let delay = Math.floor(Math.random() * 3000) + 5000;
+            setTimeout(() => {
+                const events = [launchMultipleHeartFireworks, triggerRowEvent, triggerNeonHeartsEvent];
+                const chosen = events[Math.floor(Math.random() * events.length)];
+                chosen();
+                scheduleNextEvent();
+            }, delay);
+        }
+        scheduleNextEvent();
+
+        function drawContourHeart(cx, cy, size) {
+            ctx.save();
+            ctx.beginPath();
+            let heartWidth = size;
+            let heartHeight = size;
+            ctx.moveTo(cx, cy + heartHeight * 0.3);
+            ctx.bezierCurveTo(cx, cy, cx - heartWidth * 0.5, cy - heartHeight * 0.5, cx - heartWidth * 0.5, cy - heartHeight * 0.1);
+            ctx.bezierCurveTo(cx - heartWidth * 0.5, cy + heartHeight * 0.3, cx, cy + heartHeight * 0.7, cx, cy + heartHeight);
+            ctx.bezierCurveTo(cx, cy + heartHeight * 0.7, cx + heartWidth * 0.5, cy + heartHeight * 0.3, cx + heartWidth * 0.5, cy - heartHeight * 0.1);
+            ctx.bezierCurveTo(cx + heartWidth * 0.5, cy - heartHeight * 0.5, cx, cy, cx, cy + heartHeight * 0.3);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function animateFx() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.012;
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            if (activeRowTimer > 0) {
+                activeRowTimer--;
+                if (activeRowTimer % 60 === 0) playSubtleSound('ecg_beep');
+
+                ctx.save();
+                ctx.strokeStyle = 'rgba(244, 63, 94, 0.75)';
+                ctx.lineWidth = 2.5;
+                
+                let rowY = canvas.height * 0.88;
+                let spacing = 70; 
+                let startX = -(rowOffset % spacing);
+
+                for (let x = startX; x < canvas.width + spacing; x += spacing) {
+                    drawContourHeart(x, rowY - 10, 45);
+                }
+
+                ctx.restore();
+                rowOffset += 2;
+            }
+
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height * 0.12);
+            ctx.rotate(Math.sin(Date.now() * 0.001) * 0.03);
+
+            ctx.font = 'bold clamp(1.2rem, 3vw, 36px) "Segoe UI", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            ctx.shadowColor = '#f43f5e';
+            ctx.shadowBlur = 20;
+            ctx.fillStyle = '#ffe4e6';
+            ctx.fillText('Por Siempre Juntos', 0, 0);
+
+            ctx.shadowBlur = 5;
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText('Por Siempre Juntos', 0, 0);
+            ctx.restore();
+
+            for (let i = neonHearts.length - 1; i >= 0; i--) {
+                let nh = neonHearts[i];
+                nh.timer--;
+                if (nh.scale < 1) nh.scale += 0.06;
+                if (nh.timer < 30) nh.alpha -= 0.03;
+                if (nh.alpha <= 0) {
+                    neonHearts.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = nh.alpha;
+                ctx.translate(nh.x, nh.y);
+                ctx.scale(nh.scale, nh.scale);
+
+                ctx.shadowColor = '#f43f5e';
+                ctx.shadowBlur = 18;
+                ctx.strokeStyle = '#ff758c';
+                ctx.lineWidth = 4;
+
+                ctx.beginPath();
+                ctx.moveTo(0, -25);
+                ctx.bezierCurveTo(-50, -80, -110, -10, 0, 75);
+                ctx.bezierCurveTo(110, -10, 50, -80, 0, -25);
+                ctx.stroke();
+
+                ctx.shadowBlur = 8;
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'italic 20px "Segoe UI", cursive, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Te amo', 0, 0);
+                ctx.restore();
+            }
+
+            requestAnimationFrame(animateFx);
+        }
+        animateFx();
+
+        const heartsContainer = document.getElementById('heartsContainer');
+        for (let i = 0; i < 20; i++) {
+            const h = document.createElement('div');
+            h.className = 'heart';
+            h.innerHTML = '💜';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.top = Math.random() * 100 + 'vh';
+            h.style.animationDuration = (4 + Math.random() * 4) + 's';
+            h.style.animationDelay = (Math.random() * 3) + 's';
+            heartsContainer.appendChild(h);
+        }
+
+        // --- PREGUNTAS (El orden de las preguntas NO cambia, pero sus respuestas se desordenan aleatoriamente) ---
+        const questions = [
+            {
+                title: "Pregunta 1 de 5",
+                text: "¿Cuánto tiempo llevamos siendo los novios más felices del mundo?",
+                options: [
+                    { text: "Una semana", correct: false },
+                    { text: "3 Meses exactos de amor puro", correct: true },
+                    { text: "Varios años", correct: false }
+                ]
+            },
+            {
+                title: "Pregunta 2 de 5",
+                text: "¿Qué es lo que más me gusta hacer cuando estoy contigo?",
+                options: [
+                    { text: "Verte sonreír y abrazarte", correct: true },
+                    { text: "Estar en silencio total", correct: false },
+                    { text: "Mirar el celular", correct: false }
+                ]
+            },
+            {
+                title: "Pregunta 3 de 5",
+                text: "¿Quién de los dos se enamoró primero?",
+                options: [
+                    { text: "Fue un misterio", correct: false },
+                    { text: "Tú", correct: false },
+                    { text: "¡Los dos al mismo instante!", correct: true }
+                ]
+            },
+            {
+                title: "Pregunta 4 de 5",
+                text: "¿Qué es lo que me gusta más de ti?",
+                options: [
+                    { text: "Tus manos", correct: false, isSpecial4: true },
+                    { text: "Tus ojos", correct: false, isSpecial4: true },
+                    { text: "Tu sonrisa", correct: false, isSpecial4: true }
+                ]
+            },
+            {
+                title: "Pregunta 5 de 5 (¡Última!)",
+                text: "Yo quiero estar siempre contigo. A ti ¿te gustaría estar siempre conmigo??",
+                options: [
+                    { text: "Claro que sí corazón, sí quiero estar para siempre contigo", responseIndex: 0 },
+                    { text: "Hazme un hijito", responseIndex: 1 },
+                    { text: "Quiero que seamos una pareja feliz y esforzarnos juntos", responseIndex: 2 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+
+        function startQuiz() {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            loadQuestion();
+        }
+
+        let dialogueCallback = null;
+
+        function showDialogue(text, callback) {
+            const box = document.getElementById('rpgDialogueBox');
+            const textElem = document.getElementById('rpgDialogueText');
+            textElem.innerText = text;
+            box.style.display = 'block';
+            dialogueCallback = callback;
+        }
+
+        function advanceDialogue() {
+            const box = document.getElementById('rpgDialogueBox');
+            box.style.display = 'none';
+            if (dialogueCallback) {
+                let cb = dialogueCallback;
+                dialogueCallback = null;
+                cb();
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === ' ' || e.key === 'Enter') && document.getElementById('rpgDialogueBox').style.display === 'block') {
+                e.preventDefault();
+                advanceDialogue();
+            }
+        });
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('question-title').innerText = q.title;
+            document.getElementById('question-text').innerText = q.text;
+            const container = document.getElementById('quiz-options');
+            container.innerHTML = '';
+
+            // Clonar y barajar aleatoriamente el orden de las respuestas de esta pregunta
+            let shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'question-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => {
+                    if (currentQuestion === 3) { // Pregunta 4
+                        showDialogue("¿Enserio creíste que solo me gusta una cosa de ti? ¡Tú me encantas tal y como eres, amo todito de ti ❤️", () => {
+                            currentQuestion++;
+                            loadQuestion();
+                        });
+                    } else if (currentQuestion === 4) { // Pregunta 5
+                        let msg = "";
+                        if (opt.responseIndex === 0) {
+                            msg = "Me haces el chico más feliz del mundo. ¡TE AMO! ❤️";
+                        } else if (opt.responseIndex === 1) {
+                            msg = "Ohhh vaya ufff ya te estabas tardando, seamos una familia feliz y ahora... ¡ponte en cuatro UwU! ❤️";
+                        } else if (opt.responseIndex === 2) {
+                            msg = "Enserio corazón, hayyyy te amo te amo te amo te recontra amo muack muack ❤️❤️❤️";
+                        }
+                        
+                        showDialogue(msg, () => {
+                            showEnding();
+                        });
+                    } else { // Preguntas 1, 2 y 3
+                        if (opt.correct) {
+                            currentQuestion++;
+                            loadQuestion();
+                        } else {
+                            showDialogue("¡Mmm casi! Pero piénsalo bien, prueba con otra opción. 😉");
+                        }
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function showEnding() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('ending-screen').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

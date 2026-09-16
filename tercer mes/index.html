@@ -1,0 +1,3001 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Infinite Disco - Tercer Aniversario</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 50%, #150a2e 0%, #030214 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .oculto {
+      display: none !important;
+    }
+
+    /* ================= LOGIN ================= */
+    #vista-login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, #150a2e 0%, #030214 100%);
+      padding: 16px;
+    }
+
+    .login-card {
+      width: min(90vw, 360px);
+      background: rgba(14, 7, 34, 0.92);
+      border: 2px solid #40E0D0;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(64, 224, 208, 0.4), inset 0 0 15px rgba(255, 20, 147, 0.2);
+      padding: 26px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      color: #e6ffff;
+      z-index: 10;
+    }
+
+    .login-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      text-align: center;
+      color: #40E0D0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px #40E0D0;
+    }
+
+    .login-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .login-field label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #ff1493;
+      letter-spacing: 1px;
+    }
+
+    .login-input {
+      background: #060212;
+      border: 1.5px solid #40E0D0;
+      border-radius: 6px;
+      color: #ffffff;
+      padding: 10px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .login-input:focus {
+      border-color: #ffe600;
+      box-shadow: 0 0 8px #ffe600;
+    }
+
+    .btn-login {
+      background: #ff1493;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 0 14px #ff1493;
+      transition: all 0.2s ease;
+      margin-top: 6px;
+    }
+
+    .btn-login:hover {
+      background: #00f0ff;
+      color: #030214;
+      box-shadow: 0 0 18px #00f0ff;
+    }
+
+    .login-hint {
+      font-size: 0.76rem;
+      color: #797194;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* ================= PANEL ADMIN ================= */
+    #vista-admin {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: #08031a;
+      color: #e6ffff;
+      padding: 16px;
+      z-index: 10;
+    }
+
+    .admin-card {
+      width: min(94vw, 560px);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: rgba(14, 7, 34, 0.95);
+      border: 2px solid #ffe600;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(255, 230, 0, 0.4);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .admin-title {
+      color: #ffe600;
+      font-size: 1.3rem;
+      text-align: center;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #ffe600;
+    }
+
+    .admin-selector-vistas {
+      display: flex;
+      gap: 10px;
+      background: #050212;
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid #40E0D0;
+    }
+
+    .btn-tab-admin {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+      background: #14092b;
+      color: #aaa;
+    }
+
+    .btn-tab-admin.activo {
+      background: #00f0ff;
+      color: #030214;
+      box-shadow: 0 0 12px #00f0ff;
+    }
+
+    .admin-info-box {
+      background: #050212;
+      border: 1px solid #40E0D0;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .admin-modificar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #0e0524;
+      border: 1px solid #ff1493;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .admin-btn-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .admin-hud-modo {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 25;
+      background: rgba(14, 7, 34, 0.9);
+      border: 1.5px solid #ffe600;
+      box-shadow: 0 0 14px rgba(255, 230, 0, 0.4);
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-admin-power {
+      background: #14092b;
+      border: 1px solid #ffe600;
+      color: #ffe600;
+      padding: 5px 8px;
+      border-radius: 5px;
+      font-size: 0.72rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-admin-power:hover {
+      background: #ffe600;
+      color: #030214;
+    }
+
+    /* ================= MENÚ PRINCIPAL ================= */
+    #vista-menu {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, #150a2e 0%, #030214 100%);
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    #canvas-fisica-fondo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      cursor: default;
+    }
+
+    .marcador-explosiones {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(10, 5, 24, 0.85);
+      border: 1.5px solid #00f0ff;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.35);
+      padding: 8px 12px;
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      backdrop-filter: blur(4px);
+    }
+
+    .marcador-titulo {
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: #ffe600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 20, 147, 0.4);
+      padding-bottom: 2px;
+    }
+
+    .marcador-items {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.82rem;
+      color: #e6ffff;
+    }
+
+    .marcador-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .marcador-max {
+      color: #ffe600;
+      font-weight: 900;
+      text-shadow: 0 0 6px #ffe600;
+    }
+
+    .marcador-infinito {
+      color: #00f0ff;
+      font-weight: 900;
+      text-shadow: 0 0 8px #00f0ff;
+    }
+
+    #btn-detener-figuras {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 8;
+      background: #ff0055;
+      color: #ffffff;
+      border: 2px solid #ffe600;
+      border-radius: 10px;
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff0055, 0 0 35px rgba(255, 230, 0, 0.6);
+      animation: pulsoDetener 1s infinite alternate;
+      transition: all 0.2s ease;
+    }
+
+    #btn-detener-figuras:hover {
+      background: #ffe600;
+      color: #030214;
+      transform: translateX(-50%) scale(1.08);
+      box-shadow: 0 0 25px #ffe600;
+    }
+
+    @keyframes pulsoDetener {
+      from { transform: translateX(-50%) scale(0.97); }
+      to { transform: translateX(-50%) scale(1.04); }
+    }
+
+    .menu-card {
+      position: relative;
+      width: min(90vw, 360px);
+      background: rgba(14, 7, 34, 0.94);
+      border: 2px solid #40E0D0;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(64, 224, 208, 0.4), inset 0 0 15px rgba(255, 20, 147, 0.2);
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      color: #e6ffff;
+      z-index: 5;
+      backdrop-filter: blur(5px);
+    }
+
+    .user-welcome-header {
+      background: #060212;
+      border: 1px solid #ff1493;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 4px;
+      box-shadow: 0 0 10px rgba(255, 20, 147, 0.25);
+    }
+
+    .welcome-text {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #ffe600;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(255, 230, 0, 0.5);
+    }
+
+    .score-subtext {
+      font-size: 0.8rem;
+      color: #00f0ff;
+      margin-top: 4px;
+      font-weight: 600;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .menu-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      text-align: center;
+      color: #40E0D0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px #40E0D0;
+      margin-bottom: 2px;
+    }
+
+    .menu-container {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      width: 100%;
+    }
+
+    .btn-opcion {
+      position: relative;
+      background: #14092b;
+      color: #40E0D0;
+      border: 1.5px solid #40E0D0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 0 8px rgba(64, 224, 208, 0.2);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .btn-opcion:hover:not(.bloqueado-cadenas) {
+      background: #ff1493;
+      border-color: #ffe600;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px #ff1493;
+    }
+
+    .bloqueado-cadenas {
+      background: #070312 !important;
+      color: #645c78 !important;
+      border-color: #2b2545 !important;
+      cursor: not-allowed !important;
+    }
+
+    .bloqueado-cadenas::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -15%;
+      width: 130%;
+      height: 7px;
+      background: repeating-linear-gradient(
+        90deg,
+        #00ffff 0px,
+        #00ffff 5px,
+        #008b8b 5px,
+        #021b1b 10px
+      );
+      box-shadow: 0 0 8px #00ffff, 0 0 15px rgba(64, 224, 208, 0.8);
+      border-radius: 3px;
+      transform: translateY(-50%) rotate(13deg);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .bloqueado-cadenas::after {
+      content: '🔒';
+      font-size: 0.85rem;
+      position: absolute;
+      top: 50%;
+      left: -15%;
+      width: 130%;
+      height: 7px;
+      background: repeating-linear-gradient(
+        90deg,
+        #00ffff 0px,
+        #00ffff 5px,
+        #008b8b 5px,
+        #021b1b 10px
+      );
+      box-shadow: 0 0 8px #00ffff, 0 0 15px rgba(64, 224, 208, 0.8);
+      border-radius: 3px;
+      transform: translateY(-50%) rotate(-13deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .pantalla-generica {
+      background: rgba(14, 7, 34, 0.95);
+      padding: 30px;
+      border-radius: 12px;
+      border: 2px solid #40E0D0;
+      box-shadow: 0 0 25px rgba(64, 224, 208, 0.4);
+      text-align: center;
+      max-width: 450px;
+      color: #e6ffff;
+      z-index: 10;
+    }
+
+    .pantalla-generica h2 {
+      color: #ffe600;
+      margin-bottom: 10px;
+    }
+
+    .pantalla-generica p {
+      margin: 15px 0 25px;
+      font-size: 1rem;
+      color: #00f0ff;
+    }
+
+    /* ================= TIENDA HORIZONTAL ================= */
+    #tienda {
+      max-width: min(95vw, 850px);
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tienda-lista-vertical {
+      display: flex;
+      flex-direction: row;
+      gap: 14px;
+      width: 100%;
+      margin: 16px 0;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      justify-content: flex-start;
+      scrollbar-width: thin;
+      scrollbar-color: #40E0D0 #060212;
+    }
+
+    .tienda-lista-vertical::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .tienda-lista-vertical::-webkit-scrollbar-track {
+      background: #060212;
+      border-radius: 4px;
+    }
+
+    .tienda-lista-vertical::-webkit-scrollbar-thumb {
+      background: #40E0D0;
+      border-radius: 4px;
+      box-shadow: 0 0 6px #40E0D0;
+    }
+
+    .tienda-card {
+      position: relative;
+      background: #060212;
+      border: 2px solid #281b40;
+      border-radius: 10px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 170px;
+      width: 170px;
+      min-height: 200px;
+      flex-shrink: 0;
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+
+    .tienda-card.disponible {
+      border-color: #ffe600;
+      box-shadow: 0 0 16px rgba(255, 230, 0, 0.5), inset 0 0 12px rgba(255, 230, 0, 0.15);
+      background: #0d0722;
+    }
+
+    .tienda-icon {
+      font-size: 2.6rem;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+    }
+
+    .tienda-name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #e6ffff;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .tienda-costo {
+      font-size: 0.78rem;
+      color: #00f0ff;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .btn-tienda-canjear {
+      background: #14092b;
+      color: #666;
+      border: 1px solid #444;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      cursor: not-allowed;
+      letter-spacing: 1px;
+      width: 100%;
+    }
+
+    .tienda-card.disponible .btn-tienda-canjear {
+      background: #ff1493;
+      color: #ffffff;
+      border-color: #ffe600;
+      box-shadow: 0 0 10px #ff1493;
+      cursor: pointer;
+    }
+
+    .tienda-card.disponible .btn-tienda-canjear:hover {
+      background: #00f0ff;
+      color: #030214;
+      box-shadow: 0 0 14px #00f0ff;
+    }
+
+    .cartel-agotado {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-12deg);
+      width: 120%;
+      background: rgba(120, 0, 10, 0.94);
+      color: #ffffff;
+      font-family: 'Arial Black', Impact, sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 6px 0;
+      border: 2px dashed #ff002b;
+      box-shadow: 0 0 18px #ff002b, inset 0 0 12px #330005;
+      text-shadow: 2px 2px 0px #000, -2px -2px 0px #000, 0 0 10px #ff1493;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* ================= BARRA LATERAL (INVENTARIO) ================= */
+    .inventario-lateral {
+      position: fixed;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 30;
+      background: rgba(8, 3, 22, 0.85);
+      border: 1.5px solid #40E0D0;
+      border-radius: 10px;
+      padding: 10px 6px;
+      box-shadow: 0 0 18px rgba(64, 224, 208, 0.35);
+      backdrop-filter: blur(4px);
+    }
+
+    .inventario-slot {
+      width: 44px;
+      height: 44px;
+      background: #04010d;
+      border: 1.5px solid #2e234a;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .inventario-slot.equipado {
+      border-color: #00f0ff;
+      box-shadow: 0 0 12px #00f0ff;
+      background: #14092b;
+    }
+
+    .inventario-slot.equipado::after {
+      content: '✔';
+      position: absolute;
+      bottom: -2px;
+      right: 2px;
+      font-size: 0.65rem;
+      color: #ffe600;
+      font-weight: 900;
+      text-shadow: 0 0 4px #ffe600;
+    }
+
+    /* ================= CAPÍTULO 1 ================= */
+    .infinite-disco-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      background: #030214;
+    }
+
+    .disco-sky {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 65%;
+      background: radial-gradient(circle at 50% 30%, #54a0ff 0%, #a55eea 35%, #0c0827 80%);
+      opacity: 0.88;
+      z-index: 1;
+    }
+
+    .sky-swirl {
+      position: absolute;
+      top: -20%; left: -20%; width: 140%; height: 80%;
+      background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.35) 0%, rgba(255, 0, 128, 0.2) 40%, transparent 70%);
+      filter: blur(30px);
+      z-index: 2;
+    }
+
+    .spotlight {
+      position: absolute;
+      top: 0;
+      width: clamp(2px, 0.4vw, 4px);
+      height: 65%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(0,240,255,0.05));
+      box-shadow: 0 0 16px #00f0ff;
+      z-index: 3;
+    }
+    .spotlight.left { left: 18%; transform: rotate(-25deg); }
+    .spotlight.right { right: 18%; transform: rotate(25deg); }
+
+    .mountains-background {
+      position: absolute;
+      bottom: clamp(140px, 28vh, 260px);
+      width: 100%;
+      height: clamp(60px, 12vh, 130px);
+      background: linear-gradient(180deg, #1b0a33 0%, #060214 100%);
+      clip-path: polygon(
+        0% 100%, 0% 70%, 8% 45%, 15% 65%, 23% 30%, 32% 58%, 
+        41% 25%, 50% 50%, 58% 20%, 68% 55%, 77% 35%, 85% 60%, 
+        93% 40%, 100% 65%, 100% 100%
+      );
+      z-index: 3;
+      opacity: 0.95;
+    }
+
+    .giant-disco-ball {
+      position: relative;
+      margin-top: clamp(10px, 2.5vh, 30px);
+      width: clamp(110px, 18vh, 190px);
+      height: clamp(110px, 18vh, 190px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #ff80df 0%, #ff1493 55%, #7a0048 95%);
+      box-shadow: 0 0 clamp(20px, 4vw, 40px) #ff1493, inset 0 0 20px rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 4;
+      flex-shrink: 0;
+    }
+
+    .ball-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .sub-badge {
+      font-size: clamp(0.6rem, 1.2vh, 0.9rem);
+      font-weight: 900;
+      color: #ffe600;
+      letter-spacing: 2px;
+      text-shadow: 0 0 6px #ffe600;
+      font-style: italic;
+    }
+
+    .main-title {
+      font-size: clamp(1.6rem, 4vh, 2.8rem);
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 0.95;
+      font-family: 'Arial Black', Impact, sans-serif;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.6), 0 0 12px rgba(255,255,255,0.8);
+    }
+
+    .sparkle {
+      position: absolute;
+      color: #ffe600;
+      font-size: clamp(0.9rem, 1.8vh, 1.4rem);
+      text-shadow: 0 0 10px #ffe600;
+      animation: destello 1s infinite alternate;
+    }
+    .sp-1 { top: 15%; right: 15%; }
+    .sp-2 { bottom: 15%; left: 15%; animation-delay: 0.5s; }
+
+    .crowd-silhouette {
+      position: absolute;
+      bottom: clamp(135px, 26vh, 230px);
+      width: 100%;
+      height: clamp(30px, 6vh, 50px);
+      background: #03010b;
+      clip-path: polygon(
+        0% 100%, 3% 50%, 8% 75%, 15% 40%, 22% 65%, 29% 30%, 36% 70%, 
+        44% 35%, 52% 75%, 60% 40%, 69% 68%, 78% 30%, 86% 70%, 94% 45%, 100% 100%
+      );
+      z-index: 4;
+    }
+
+    .center-neon-billboard {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      transform: translateY(-50%);
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.5vh, 16px);
+      pointer-events: none;
+    }
+
+    .marquee-wrapper {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      background: rgba(4, 2, 20, 0.8);
+      border-top: 2px solid #40E0D0;
+      border-bottom: 2px solid #40E0D0;
+      box-shadow: 0 0 18px rgba(64, 224, 208, 0.6), inset 0 0 10px rgba(64, 224, 208, 0.3);
+      padding: clamp(4px, 0.8vh, 8px) 0;
+      display: flex;
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      flex-shrink: 0;
+      animation: scrollContinuo 18s linear infinite;
+    }
+
+    .neon-text-line {
+      font-size: clamp(0.85rem, 2.2vw, 1.35rem);
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #e6ffff;
+      text-transform: uppercase;
+      padding-right: 30px;
+      text-shadow: 0 0 6px #40E0D0, 0 0 14px #40E0D0, 0 0 24px #00CED1;
+    }
+
+    @keyframes scrollContinuo {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .dance-floor-grid {
+      position: absolute;
+      bottom: 0; left: 0; width: 100%;
+      height: clamp(140px, 28vh, 250px);
+      background: 
+        linear-gradient(rgba(64, 224, 208, 0.35) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(64, 224, 208, 0.35) 1px, transparent 1px);
+      background-size: clamp(22px, 3.5vw, 36px) clamp(22px, 3.5vw, 36px);
+      background-color: #020112;
+      transform: perspective(260px) rotateX(46deg);
+      transform-origin: bottom center;
+      border-top: 2px solid #ff007f;
+      box-shadow: 0 0 25px rgba(255, 0, 127, 0.5);
+      z-index: 3;
+    }
+
+    .disco-interactive-ui {
+      position: relative;
+      z-index: 7;
+      width: min(92vw, 520px);
+      margin-bottom: clamp(10px, 2.2vh, 24px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.4vh, 12px);
+    }
+
+    .intro-instrucciones {
+      background: rgba(4, 2, 20, 0.85);
+      border: 1.5px solid #40E0D0;
+      border-radius: 8px;
+      padding: clamp(8px, 1.5vh, 12px);
+      text-align: center;
+      color: #e6ffff;
+      box-shadow: 0 0 12px rgba(64, 224, 208, 0.35);
+    }
+
+    .inst-titulo {
+      font-size: clamp(0.85rem, 1.6vh, 1.05rem);
+      font-weight: 900;
+      color: #ffe600;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+      text-shadow: 0 0 8px #ffe600;
+    }
+
+    .inst-detalle {
+      font-size: clamp(0.72rem, 1.3vh, 0.88rem);
+      line-height: 1.35;
+      color: #c8fbf7;
+    }
+
+    .inst-detalle b {
+      color: #ffffff;
+    }
+
+    .btn-iniciar-single {
+      background: rgba(15, 6, 36, 0.9);
+      color: #40E0D0;
+      border: 2px solid #40E0D0;
+      border-radius: 8px;
+      padding: clamp(12px, 2vh, 16px);
+      font-weight: 900;
+      font-size: clamp(0.95rem, 1.8vh, 1.2rem);
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(64, 224, 208, 0.4);
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .btn-iniciar-single:hover {
+      background: #ff1493;
+      border-color: #ffe600;
+      color: #ffffff;
+      box-shadow: 0 0 20px #ff1493;
+      transform: scale(1.03);
+    }
+
+    .btn-retro-back {
+      background: rgba(10, 5, 20, 0.75);
+      border: 2px solid #ff007f;
+      color: #ff007f;
+      padding: clamp(10px, 1.8vh, 14px);
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: clamp(0.8rem, 1.4vh, 1rem);
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-retro-back:hover {
+      background: #ff007f;
+      color: #fff;
+      box-shadow: 0 0 14px #ff007f;
+      transform: scale(1.03);
+    }
+
+    @keyframes destello {
+      0% { transform: scale(0.8) rotate(0deg); opacity: 0.4; }
+      100% { transform: scale(1.2) rotate(15deg); opacity: 1; }
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(3, 2, 20, 0.82);
+      backdrop-filter: blur(6px);
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .trivia-box {
+      width: min(92vw, 440px);
+      background: #08031a;
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.5), inset 0 0 20px rgba(255, 20, 147, 0.25);
+      padding: 20px;
+      color: #e6ffff;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      animation: aparecerModal 0.25s ease-out;
+    }
+
+    @keyframes aparecerModal {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .trivia-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ff1493;
+      padding-bottom: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .trivia-stat-timer {
+      color: #ffe600;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      text-shadow: 0 0 8px #ffe600;
+    }
+
+    .trivia-stat-score {
+      color: #00f0ff;
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 0 8px #00f0ff;
+    }
+
+    .trivia-question-num {
+      color: #ff1493;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .trivia-question-text {
+      font-size: clamp(0.95rem, 2.4vw, 1.15rem);
+      font-weight: 700;
+      line-height: 1.35;
+      text-align: center;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      text-shadow: 0 0 6px rgba(255,255,255,0.4);
+    }
+
+    .trivia-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-trivia-opt {
+      background: #14092b;
+      border: 1.5px solid #00f0ff;
+      color: #e6ffff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      box-shadow: 0 0 6px rgba(0, 240, 255, 0.2);
+    }
+
+    .btn-trivia-opt:hover {
+      background: #ff1493;
+      border-color: #ffe600;
+      color: #ffffff;
+      transform: translateX(4px);
+      box-shadow: 0 0 12px #ff1493;
+    }
+
+    .btn-trivia-close {
+      background: transparent;
+      border: 1px solid #666;
+      color: #aaa;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-trivia-close:hover {
+      color: #fff;
+      border-color: #ff1493;
+    }
+
+    /* ================= CAPÍTULO 2: ESCAPE ROOM (NOVELA GRÁFICA) ================= */
+    #cap2 {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: #020108;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #canvas-escape-room {
+      background: #0c0817;
+      border: 3px solid #ff1493;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(255, 20, 147, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.8);
+      max-width: 96vw;
+      max-height: 70vh;
+    }
+
+    /* HUD de nivel superior centrado exactamente en la parte superior */
+    .escape-room-hud {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 5, 24, 0.9);
+      border: 1.5px solid #00f0ff;
+      border-radius: 8px;
+      padding: 6px 18px;
+      z-index: 10;
+      pointer-events: none;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    }
+
+    .escape-room-sala-num {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #ffe600;
+      font-family: 'Courier New', Courier, monospace;
+      text-shadow: 0 0 8px #ffe600;
+    }
+
+    /* DIÁLOGO ESTILO NOVELA GRÁFICA (INFERIOR) MEJORADO */
+    .escape-dialogo-box {
+      position: absolute;
+      bottom: 80px;
+      width: min(94vw, 760px);
+      background: rgba(8, 4, 20, 0.95);
+      border: 2px solid #00f0ff;
+      border-radius: 10px;
+      padding: 16px 20px;
+      color: #e6ffff;
+      z-index: 40;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .dialogo-remitente {
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: #ffe600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .dialogo-texto {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .dialogo-hint {
+      font-size: 0.72rem;
+      color: #00f0ff;
+      text-align: right;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    /* INVENTARIO INFERIOR */
+    .escape-room-inventario-inferior {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      background: rgba(8, 3, 22, 0.9);
+      border: 1.5px solid #40E0D0;
+      border-radius: 10px;
+      padding: 8px 16px;
+      box-shadow: 0 0 20px rgba(64, 224, 208, 0.35);
+      z-index: 10;
+      backdrop-filter: blur(4px);
+    }
+
+    .escape-slot {
+      width: 46px;
+      height: 46px;
+      background: #04010d;
+      border: 1.5px solid #2e234a;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .escape-slot.seleccionado {
+      border-color: #ffe600;
+      box-shadow: 0 0 10px #ffe600;
+      background: #1c1409;
+    }
+
+    .btn-escape-volver {
+      position: absolute;
+      top: 14px;
+      left: 20px;
+      z-index: 10;
+      background: rgba(14, 7, 34, 0.85);
+      border: 1px solid #ff1493;
+      color: #ff1493;
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-escape-volver:hover {
+      background: #ff1493;
+      color: #ffffff;
+      box-shadow: 0 0 12px #ff1493;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= 1. LOGIN ================= -->
+  <div id="vista-login">
+    <div class="login-card">
+      <div class="login-title">Acceso al Sistema</div>
+
+      <div class="login-field">
+        <label>USUARIO:</label>
+        <input type="text" id="login-user" class="login-input" placeholder="Ingresa tu usuario">
+      </div>
+
+      <div class="login-field">
+        <label>CONTRASEÑA:</label>
+        <input type="password" id="login-pass" class="login-input" placeholder="******">
+      </div>
+
+      <button class="btn-login" id="btn-login-action" onclick="iniciarSesion()">INGRESAR</button>
+
+      <div class="login-hint">
+        (Presiona Enter para acceder)
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 2. PANEL ADMIN ================= -->
+  <div id="vista-admin" class="oculto">
+    <div class="admin-card">
+      <div class="admin-title">Panel de Control (Admin)</div>
+
+      <div class="admin-selector-vistas">
+        <button id="tab-admin-dash" class="btn-tab-admin activo" onclick="seleccionarSubModoAdmin('admin')">⚙️ VISTA ADMIN</button>
+        <button id="tab-admin-client" class="btn-tab-admin" onclick="seleccionarSubModoAdmin('cliente')">👁️ VISTA CLIENTE</button>
+      </div>
+
+      <div id="bloque-admin-dashboard">
+        <div class="admin-field" style="display:flex; flex-direction:column; gap:6px;">
+          <label style="color:#00f0ff; font-weight:bold; font-size:0.85rem;">SELECCIONAR USUARIO A GESTIONAR:</label>
+          <select id="admin-select-target-user" class="login-input" onchange="cambiarUsuarioObjetivoAdmin(this.value)">
+            <option value="melina">Melina</option>
+            <option value="cliente">cliente</option>
+          </select>
+        </div>
+
+        <div class="admin-info-box" id="admin-log-box" style="margin-top:10px;"></div>
+
+        <div class="admin-modificar" style="margin-top:10px;">
+          <label style="color:#ffe600; font-size:0.85rem; font-weight:bold;">MODIFICAR PUNTUACIÓN DE ESTE USUARIO:</label>
+          <input type="number" id="admin-new-score" class="login-input" placeholder="Nuevo récord en puntos">
+          <button class="btn-login" style="background:#00f0ff; color:#030214;" onclick="guardarCambioPuntaje()">APLICAR NUEVO PUNTAJE</button>
+        </div>
+      </div>
+
+      <div class="admin-btn-row">
+        <button class="btn-opcion" style="flex:1;" onclick="irAlMenuDesdePanel()">IR AL MENÚ</button>
+        <button class="btn-opcion" style="flex:1; background:#a30029; border-color:#5a0014; color:#fff;" onclick="cerrarSesion()">CERRAR SESIÓN</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="hud-inventario-lateral" class="inventario-lateral oculto"></div>
+
+  <!-- ================= 3. MENÚ PRINCIPAL ================= -->
+  <div id="vista-menu" class="oculto">
+    <canvas id="canvas-fisica-fondo"></canvas>
+
+    <div id="hud-admin-poderes" class="admin-hud-modo oculto">
+      <button class="btn-admin-power" onclick="toggleMarcadorExplosiones()">👁️ Marcas: ON/OFF</button>
+      <button class="btn-admin-power" onclick="sumarPuntosRapidos(500)">⚡ +500 Pts</button>
+      <button class="btn-admin-power" style="border-color:#00f0ff; color:#00f0ff;" onclick="volverAlPanelAdmin()">⚙️ Panel</button>
+    </div>
+
+    <div id="caja-marcador-explosiones" class="marcador-explosiones">
+      <div class="marcador-titulo">✦ EXPLOSIONES ✦</div>
+      <div class="marcador-items">
+        <div class="marcador-item"><span>🚪 Puerta:</span> <span id="cnt-puerta">0/20</span></div>
+        <div class="marcador-item"><span>❤️ Corazón:</span> <span id="cnt-corazon">0/20</span></div>
+        <div class="marcador-item"><span>✉️ Carta:</span> <span id="cnt-carta">0/20</span></div>
+        <div class="marcador-item"><span>✒️ Pluma:</span> <span id="cnt-pluma">0/20</span></div>
+      </div>
+    </div>
+
+    <button id="btn-detener-figuras" class="oculto" onclick="detenerTodasLasFiguras()">⏹ DETENER</button>
+
+    <div class="menu-card">
+      <div class="user-welcome-header">
+        <div class="welcome-text" id="menu-welcome-text">¡HOLA, USUARIO!</div>
+        <div class="score-subtext" id="menu-score-text">ÚLTIMO PUNTAJE: 0 PTS</div>
+      </div>
+
+      <div class="menu-title">Elije una opción</div>
+
+      <div class="menu-container">
+        <button class="btn-opcion" onclick="mostrarPantalla('cap1')">Capítulo 1</button>
+        <button id="btn-menu-cap2" class="btn-opcion bloqueado-cadenas" onclick="intentarEntrarBloqueado('Capítulo 2', 1500)">Capítulo 2</button>
+        <button id="btn-menu-cap3" class="btn-opcion bloqueado-cadenas" onclick="intentarEntrarBloqueado('Capítulo 3', 1800)">Capítulo 3</button>
+        <button id="btn-menu-cap4" class="btn-opcion bloqueado-cadenas" onclick="intentarEntrarBloqueado('Capítulo 4', 2000)">Capítulo 4</button>
+        <button class="btn-opcion" onclick="mostrarPantalla('tienda')">Tienda</button>
+        <button class="btn-opcion" onclick="mostrarPantalla('opciones')">Opciones</button>
+        <button class="btn-opcion" style="background:#4a081a; border-color:#ff1493; color:#ff99bb;" onclick="cerrarSesion()">Salir / Cerrar Sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 4. CAPÍTULO 1 ================= -->
+  <div id="cap1" class="infinite-disco-stage oculto">
+    <div class="disco-sky"></div>
+    <div class="sky-swirl"></div>
+    <div class="spotlight left"></div>
+    <div class="spotlight right"></div>
+
+    <div class="giant-disco-ball">
+      <div class="ball-text">
+        <span class="sub-badge">✦ INFINITE ✦</span>
+        <span class="main-title">DISCO</span>
+      </div>
+      <div class="sparkle sp-1">✦</div>
+      <div class="sparkle sp-2">✦</div>
+    </div>
+
+    <div class="mountains-background"></div>
+    <div class="crowd-silhouette"></div>
+
+    <div class="center-neon-billboard">
+      <div class="marquee-wrapper">
+        <div class="marquee-track">
+          <span class="neon-text-line">✦ FELIZ TERCER ANIVERSARIO ✦</span>
+          <span class="neon-text-line">✦ FELIZ TERCER ANIVERSARIO ✦</span>
+          <span class="neon-text-line">✦ FELIZ TERCER ANIVERSARIO ✦</span>
+          <span class="neon-text-line">✦ FELIZ TERCER ANIVERSARIO ✦</span>
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <span class="neon-text-line">✦ FELIZ TERCER ANIVERSARIO ✦</span>
+          <span class="neon-text-line">✦ FELIZ TERCER ANIVERSARIO ✦</span>
+          <span class="neon-text-line">✦ FELIZ TERCER ANIVERSARIO ✦</span>
+          <span class="neon-text-line">✦ FELIZ TERCER ANIVERSARIO ✦</span>
+        </div>
+      </div>
+      <div class="marquee-wrapper">
+        <div class="marquee-track">
+          <span class="neon-text-line">✦ TE AMO ❤️---- TE AMO MUCHO MAS ✦</span>
+          <span class="neon-text-line">✦ TE AMO ❤️---- TE AMO MUCHO MAS ✦</span>
+          <span class="neon-text-line">✦ TE AMO ❤️---- TE AMO MUCHO MAS ✦</span>
+          <span class="neon-text-line">✦ TE AMO ❤️---- TE AMO MUCHO MAS ✦</span>
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <span class="neon-text-line">✦ TE AMO ❤️---- TE AMO MUCHO MAS ✦</span>
+          <span class="neon-text-line">✦ TE AMO ❤️---- TE AMO MUCHO MAS ✦</span>
+          <span class="neon-text-line">✦ TE AMO ❤️---- TE AMO MUCHO MAS ✦</span>
+          <span class="neon-text-line">✦ TE AMO ❤️---- TE AMO MUCHO MAS ✦</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dance-floor-grid"></div>
+
+    <div class="disco-interactive-ui">
+      <div class="intro-instrucciones">
+        <p class="inst-titulo">✦ DESAFÍO DISCO ✦</p>
+        <p class="inst-detalle">Tienes <b>15 segundos</b> por pregunta para responder <b>10 preguntas</b> aleatorias.<br>
+        Acierto: <b>+200 pts</b> | Error o tiempo agotado: <b>+100 pts</b>.</p>
+      </div>
+
+      <button class="btn-iniciar-single" onclick="iniciarTrivia()">▶ INICIAR DESAFÍO</button>
+      <button class="btn-retro-back" onclick="volverAlMenu()">← VOLVER AL MENÚ</button>
+    </div>
+
+    <div id="modal-trivia" class="modal-backdrop oculto">
+      <div class="trivia-box">
+        <div class="trivia-header">
+          <span class="trivia-question-num" id="t-num">PREGUNTA 1/10</span>
+          <span class="trivia-stat-timer" id="t-time">⏱ 15s</span>
+          <span class="trivia-stat-score" id="t-score">SCORE: 0</span>
+        </div>
+
+        <div class="trivia-question-text" id="t-question">Cargando pregunta...</div>
+        <div class="trivia-options-list" id="t-options"></div>
+
+        <button id="btn-cancelar-desafio" class="btn-trivia-close" onclick="cerrarTrivia()">Cancelar Desafío</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 5. CAPÍTULO 2: ESCAPE ROOM (5 NIVELES NOVELA GRÁFICA) ================= -->
+  <div id="cap2" class="oculto">
+    <!-- HUD centrado exactamente en la parte superior -->
+    <div class="escape-room-hud">
+      <span class="escape-room-sala-num" id="hud-nivel-texto">1-0</span>
+    </div>
+
+    <button class="btn-escape-volver" onclick="volverAlMenu()">VOLVER</button>
+
+    <canvas id="canvas-escape-room" width="760" height="420"></canvas>
+
+    <!-- Caja de Diálogo Estilo Novela Gráfica -->
+    <div id="escape-dialogo-box" class="escape-dialogo-box oculto">
+      <div class="dialogo-remitente" id="dialogo-remitente">VINCENT</div>
+      <div class="dialogo-texto" id="dialogo-texto">Texto de prueba...</div>
+      <div class="dialogo-hint">[ Presiona E para continuar ]</div>
+    </div>
+
+    <!-- Inventario Inferior -->
+    <div class="escape-room-inventario-inferior" id="escape-inventario-slots">
+      <div class="escape-slot" id="slot-1" onclick="seleccionarSlotInventario(0)"></div>
+      <div class="escape-slot" id="slot-2" onclick="seleccionarSlotInventario(1)"></div>
+      <div class="escape-slot" id="slot-3" onclick="seleccionarSlotInventario(2)"></div>
+      <div class="escape-slot" id="slot-4" onclick="seleccionarSlotInventario(3)"></div>
+    </div>
+  </div>
+
+  <div id="cap3" class="pantalla-generica oculto">
+    <h2>Capítulo 3</h2>
+    <p>Sé que lo lograrás, no te rindas ahora.</p>
+    <button class="btn-opcion" onclick="volverAlMenu()">Volver al Menú</button>
+  </div>
+
+  <div id="cap4" class="pantalla-generica oculto">
+    <h2>Capítulo 4</h2>
+    <p>Estás muy cerca del final.</p>
+    <button class="btn-opcion" onclick="volverAlMenu()">Volver al Menú</button>
+  </div>
+
+  <!-- ================= TIENDA ================= -->
+  <div id="tienda" class="pantalla-generica oculto">
+    <h2>🛒 Tienda Secreta</h2>
+    <p id="texto-record-pistas" style="margin-bottom: 10px; font-size: 0.88rem;"></p>
+    
+    <div class="tienda-lista-vertical" id="tienda-items-grid"></div>
+
+    <button class="btn-opcion" style="margin-top: 10px; width: 100%;" onclick="volverAlMenu()">Volver al Menú</button>
+  </div>
+
+  <div id="opciones" class="pantalla-generica oculto">
+    <h2>Configuración</h2>
+    <p>Ajustes de pantalla y sesión.</p>
+    <button class="btn-opcion" onclick="volverAlMenu()">Volver al Menú</button>
+  </div>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    let rolActual = null;
+    let usuarioActual = '';
+    let usuarioObjetivoAdmin = 'melina';
+    let modoAdminSeleccionado = 'admin';
+    let puntaje = 0;
+    let tiempoRestante = 15;
+    let temporizador = null;
+
+    const CATALOGO_TIENDA = [
+      { id: 'llave', nombre: 'Llave Antigua', icono: '🗝️', puntosReq: 2000 },
+      { id: 'tijera', nombre: 'Tijera', icono: '✂️', puntosReq: 3500 },
+      { id: 'cuaderno', nombre: 'Cuaderno', icono: '📓', puntosReq: 8000 },
+      { id: 'cuchillo', nombre: 'Cuchillo', icono: '🔪', puntosReq: 10000 },
+      { id: 'escopeta', nombre: 'Escopeta', icono: '💥', puntosReq: 15000 },
+      { id: 'veneno', nombre: 'Veneno', icono: '🧪', puntosReq: 20000 }
+    ];
+
+    function getPrefijoUsuario(u = null) {
+      const nombre = (u || usuarioActual || 'invitado').toLowerCase();
+      return `user_data_${nombre}`;
+    }
+
+    function leerDatosUsuario(u = null) {
+      const key = getPrefijoUsuario(u);
+      const datos = localStorage.getItem(key);
+      if (datos) {
+        try { return JSON.parse(datos); } catch (e) {}
+      }
+      return {
+        record: 0,
+        ultimoPuntaje: 0,
+        ultimaSesion: 'Sin registros aún',
+        comprados: [],
+        equipados: []
+      };
+    }
+
+    function guardarDatosUsuario(objetoDatos, u = null) {
+      const key = getPrefijoUsuario(u);
+      localStorage.setItem(key, JSON.stringify(objetoDatos));
+    }
+
+    function getInventarioGuardado() {
+      return leerDatosUsuario().comprados || [];
+    }
+
+    function getEquipadosGuardados() {
+      return (leerDatosUsuario().equipados || []).slice(0, 1);
+    }
+
+    const inputUser = document.getElementById('login-user');
+    const inputPass = document.getElementById('login-pass');
+
+    [inputUser, inputPass].forEach(input => {
+      input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          iniciarSesion();
+        }
+      });
+    });
+
+    function actualizarCabeceraMenu() {
+      const nombreMostrar = usuarioActual ? usuarioActual.toUpperCase() : 'INVITADO';
+      const uData = leerDatosUsuario();
+      document.getElementById('menu-welcome-text').innerText = `¡BIENVENID@, ${nombreMostrar}!`;
+      document.getElementById('menu-score-text').innerText = `ÚLTIMO PUNTAJE OBTENIDO: ${uData.ultimoPuntaje} PTS`;
+    }
+
+    function renderizarInventarioLateral() {
+      const contenedor = document.getElementById('hud-inventario-lateral');
+      const comprados = getInventarioGuardado();
+      const equipados = getEquipadosGuardados();
+
+      if (comprados.length === 0 || !rolActual) {
+        contenedor.classList.add('oculto');
+        return;
+      }
+
+      contenedor.innerHTML = '';
+      comprados.forEach(idItem => {
+        const item = CATALOGO_TIENDA.find(x => x.id === idItem);
+        if (!item) return;
+
+        const slot = document.createElement('div');
+        const estaEquipado = equipados.includes(idItem);
+        slot.className = 'inventario-slot' + (estaEquipado ? ' equipado' : '');
+        slot.title = `${item.nombre} (Clic para equipar/desequipar)`;
+        slot.innerText = item.icono;
+        slot.onclick = () => alternarEquipamientoItem(idItem);
+        contenedor.appendChild(slot);
+      });
+
+      contenedor.classList.remove('oculto');
+    }
+
+    function alternarEquipamientoItem(idItem) {
+      const uData = leerDatosUsuario();
+      if ((uData.equipados || []).includes(idItem)) {
+        uData.equipados = [];
+      } else {
+        uData.equipados = [idItem];
+      }
+      guardarDatosUsuario(uData);
+      renderizarInventarioLateral();
+    }
+
+    function renderizarTienda() {
+      const uData = leerDatosUsuario();
+      const record = uData.record || 0;
+      const ultimo = uData.ultimoPuntaje || 0;
+      const comprados = uData.comprados || [];
+
+      document.getElementById('texto-record-pistas').innerHTML = `
+        🪙 Récord acumulado: <b>${record} pts</b> | Última partida: <b>${ultimo} pts</b>.<br>
+        <i>(Tus objetos y puntos son únicos de tu cuenta)</i>
+      `;
+
+      const grid = document.getElementById('tienda-items-grid');
+      grid.innerHTML = '';
+
+      CATALOGO_TIENDA.forEach(item => {
+        const card = document.createElement('div');
+        const estaComprado = comprados.includes(item.id);
+        const puedeComprar = record >= item.puntosReq;
+
+        card.className = 'tienda-card';
+        if (puedeComprar && !estaComprado) {
+          card.classList.add('disponible');
+        }
+
+        let botonHtml = '';
+        if (estaComprado) {
+          botonHtml = `<button class="btn-tienda-canjear" disabled>ADQUIRIDO</button>`;
+        } else if (puedeComprar) {
+          botonHtml = `<button class="btn-tienda-canjear" onclick="canjearArticulo('${item.id}')">CANJEAR</button>`;
+        } else {
+          botonHtml = `<button class="btn-tienda-canjear" disabled>BLOQUEADO</button>`;
+        }
+
+        card.innerHTML = `
+          ${estaComprado ? '<div class="cartel-agotado">AGOTADO</div>' : ''}
+          <div class="tienda-icon">${item.icono}</div>
+          <div class="tienda-name">${item.nombre}</div>
+          <div class="tienda-costo">Desbloquea con ${item.puntosReq.toLocaleString()} pts</div>
+          ${botonHtml}
+        `;
+        grid.appendChild(card);
+      });
+
+      renderizarInventarioLateral();
+    }
+
+    function canjearArticulo(idItem) {
+      const uData = leerDatosUsuario();
+      if (!uData.comprados) uData.comprados = [];
+      if (!uData.comprados.includes(idItem)) {
+        uData.comprados.push(idItem);
+        uData.equipados = [idItem];
+        guardarDatosUsuario(uData);
+      }
+      renderizarTienda();
+    }
+
+    function intentarEntrarBloqueado(capitulo, puntosNecesarios) {
+      if (rolActual === 'admin' && modoAdminSeleccionado === 'admin') {
+        if (capitulo === 'Capítulo 2') mostrarPantalla('cap2');
+        if (capitulo === 'Capítulo 3') mostrarPantalla('cap3');
+        if (capitulo === 'Capítulo 4') mostrarPantalla('cap4');
+        return;
+      }
+
+      const record = leerDatosUsuario().record || 0;
+      if (record >= puntosNecesarios) {
+        alert(`¡Condición cumplida! Tienes ${record} pts. Abriendo ${capitulo}...`);
+        if (capitulo === 'Capítulo 2') mostrarPantalla('cap2');
+        if (capitulo === 'Capítulo 3') mostrarPantalla('cap3');
+        if (capitulo === 'Capítulo 4') mostrarPantalla('cap4');
+      } else {
+        alert(`🔒 ${capitulo.toUpperCase()} ESTÁ BLOQUEADO POR CADENAS NEÓN.\n\nCondición para romper las cadenas:\nObtener al menos ${puntosNecesarios} puntos en el desafío (Tu récord actual es: ${record} pts).`);
+      }
+    }
+
+    function iniciarSesion() {
+      const u = document.getElementById('login-user').value.trim();
+      const p = document.getElementById('login-pass').value.trim();
+
+      const ahora = new Date();
+      const fechaHoraTexto = ahora.toLocaleDateString() + ' - ' + ahora.toLocaleTimeString();
+
+      if (u.toLowerCase() === 'admin' && p === '123') {
+        rolActual = 'admin';
+        usuarioActual = 'admin';
+        modoAdminSeleccionado = 'admin';
+        document.getElementById('vista-login').classList.add('oculto');
+        abrirPanelAdmin();
+      } else if (u.toLowerCase() === 'melina' && p === '63222556') {
+        rolActual = 'cliente';
+        usuarioActual = 'Melina';
+        modoAdminSeleccionado = 'cliente';
+
+        const uData = leerDatosUsuario('melina');
+        uData.ultimaSesion = fechaHoraTexto;
+        guardarDatosUsuario(uData, 'melina');
+
+        document.getElementById('vista-login').classList.add('oculto');
+        aplicarPermisosVisuales();
+        actualizarCabeceraMenu();
+        document.getElementById('vista-menu').classList.remove('oculto');
+        renderizarInventarioLateral();
+        inicializarObjetos();
+        iniciarAnimacionFondo();
+      } else if (u.toLowerCase() === 'cliente' && p === '123') {
+        rolActual = 'cliente';
+        usuarioActual = 'cliente';
+        modoAdminSeleccionado = 'cliente';
+
+        const uData = leerDatosUsuario('cliente');
+        uData.ultimaSesion = fechaHoraTexto;
+        guardarDatosUsuario(uData, 'cliente');
+
+        document.getElementById('vista-login').classList.add('oculto');
+        aplicarPermisosVisuales();
+        actualizarCabeceraMenu();
+        document.getElementById('vista-menu').classList.remove('oculto');
+        renderizarInventarioLateral();
+        inicializarObjetos();
+        iniciarAnimacionFondo();
+      } else {
+        alert('Usuario o contraseña incorrectos.');
+      }
+    }
+
+    function cerrarSesion() {
+      detenerAnimacionFondo();
+      detenerJuegoEscapeRoom();
+      rolActual = null;
+      usuarioActual = '';
+      modoAdminSeleccionado = 'admin';
+      const todas = [document.getElementById('vista-login'), document.getElementById('vista-admin'), 
+                     document.getElementById('vista-menu'), document.getElementById('cap1'), 
+                     document.getElementById('cap2'), document.getElementById('cap3'), 
+                     document.getElementById('cap4'), document.getElementById('tienda'), 
+                     document.getElementById('opciones')];
+      todas.forEach(p => { if (p) p.classList.add('oculto'); });
+
+      document.getElementById('hud-inventario-lateral').classList.add('oculto');
+      document.getElementById('login-user').value = '';
+      document.getElementById('login-pass').value = '';
+      document.getElementById('vista-login').classList.remove('oculto');
+    }
+
+    function cambiarUsuarioObjetivoAdmin(u) {
+      usuarioObjetivoAdmin = u;
+      refrescarDatosAdminBox();
+    }
+
+    function refrescarDatosAdminBox() {
+      const uData = leerDatosUsuario(usuarioObjetivoAdmin);
+      document.getElementById('admin-log-box').innerHTML = `
+        <b>👤 Usuario gestionado:</b> <span style="color:#ffe600; font-weight:bold;">${usuarioObjetivoAdmin.toUpperCase()}</span><br>
+        <b>🕒 Última sesión:</b> <span style="color:#00f0ff;">${uData.ultimaSesion}</span><br>
+        <b>🎯 Última puntuación:</b> <span style="color:#ffe600;">${uData.ultimoPuntaje} pts</span><br>
+        <b>🏆 Puntuación récord actual:</b> <span style="color:#ffe600; font-weight:bold;">${uData.record} pts</span><br>
+        <b>🛍️ Objetos canjeados:</b> ${uData.comprados && uData.comprados.length ? uData.comprados.join(', ') : 'Ninguno'}
+      `;
+      document.getElementById('admin-new-score').value = uData.record;
+    }
+
+    function abrirPanelAdmin() {
+      document.getElementById('admin-select-target-user').value = usuarioObjetivoAdmin;
+      refrescarDatosAdminBox();
+      seleccionarSubModoAdmin(modoAdminSeleccionado);
+      document.getElementById('vista-admin').classList.remove('oculto');
+    }
+
+    function seleccionarSubModoAdmin(modo) {
+      modoAdminSeleccionado = modo;
+      const tabAdmin = document.getElementById('tab-admin-dash');
+      const tabClient = document.getElementById('tab-admin-client');
+      
+      if (modo === 'admin') {
+        tabAdmin.classList.add('activo');
+        tabClient.classList.remove('activo');
+      } else {
+        tabClient.classList.add('activo');
+        tabAdmin.classList.remove('activo');
+      }
+    }
+
+    function guardarCambioPuntaje() {
+      const nuevo = parseInt(document.getElementById('admin-new-score').value);
+      if (isNaN(nuevo)) {
+        alert('Ingresa un puntaje numérico válido.');
+        return;
+      }
+      const uData = leerDatosUsuario(usuarioObjetivoAdmin);
+      uData.record = nuevo;
+      uData.ultimoPuntaje = nuevo;
+      guardarDatosUsuario(uData, usuarioObjetivoAdmin);
+
+      alert(`¡Puntuación actualizada a ${nuevo} pts para ${usuarioObjetivoAdmin.toUpperCase()}!`);
+      refrescarDatosAdminBox();
+    }
+
+    function irAlMenuDesdePanel() {
+      document.getElementById('vista-admin').classList.add('oculto');
+      aplicarPermisosVisuales();
+      actualizarCabeceraMenu();
+      document.getElementById('vista-menu').classList.remove('oculto');
+      renderizarInventarioLateral();
+      inicializarObjetos();
+      iniciarAnimacionFondo();
+    }
+
+    function volverAlPanelAdmin() {
+      detenerAnimacionFondo();
+      detenerJuegoEscapeRoom();
+      document.getElementById('vista-menu').classList.add('oculto');
+      document.getElementById('hud-admin-poderes').classList.add('oculto');
+      abrirPanelAdmin();
+    }
+
+    function aplicarPermisosVisuales() {
+      const caps = ['btn-menu-cap2', 'btn-menu-cap3', 'btn-menu-cap4'];
+      const hudPoderes = document.getElementById('hud-admin-poderes');
+      const btnDetener = document.getElementById('btn-detener-figuras');
+
+      if (rolActual === 'admin' && modoAdminSeleccionado === 'admin') {
+        caps.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('bloqueado-cadenas');
+        });
+        if (hudPoderes) hudPoderes.classList.remove('oculto');
+        if (btnDetener) btnDetener.classList.remove('oculto');
+      } else {
+        caps.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('bloqueado-cadenas');
+        });
+        if (hudPoderes) hudPoderes.classList.add('oculto');
+        if (btnDetener) btnDetener.classList.add('oculto');
+      }
+    }
+
+    function toggleMarcadorExplosiones() {
+      const caja = document.getElementById('caja-marcador-explosiones');
+      if (caja) caja.classList.toggle('oculto');
+    }
+
+    function sumarPuntosRapidos(cantidad) {
+      const destino = (rolActual === 'admin') ? usuarioObjetivoAdmin : usuarioActual;
+      const uData = leerDatosUsuario(destino);
+      uData.ultimoPuntaje = (uData.ultimoPuntaje || 0) + cantidad;
+      if (uData.ultimoPuntaje > (uData.record || 0)) {
+        uData.record = uData.ultimoPuntaje;
+      }
+      guardarDatosUsuario(uData, destino);
+
+      actualizarCabeceraMenu();
+      alert(`⚡ Se añadieron +${cantidad} puntos a ${destino.toUpperCase()}. Récord: ${uData.record} pts.`);
+    }
+
+    function mostrarPantalla(idPantalla) {
+      detenerAnimacionFondo();
+      detenerJuegoEscapeRoom();
+      inicializarObjetos();
+
+      document.getElementById('vista-menu').classList.add('oculto');
+      const pantallas = [document.getElementById('cap1'), document.getElementById('cap2'), 
+                         document.getElementById('cap3'), document.getElementById('cap4'), 
+                         document.getElementById('tienda'), document.getElementById('opciones')];
+      pantallas.forEach(p => { if (p) p.classList.add('oculto'); });
+
+      if (idPantalla === 'tienda') {
+        renderizarTienda();
+      } else if (idPantalla === 'cap2') {
+        iniciarJuegoEscapeRoom();
+      }
+
+      const seleccionada = document.getElementById(idPantalla);
+      if (seleccionada) seleccionada.classList.remove('oculto');
+    }
+
+    // ================= MOTOR DE FÍSICA: FONDO DEL MENÚ =================
+    const canvas = document.getElementById('canvas-fisica-fondo');
+    const ctx = canvas.getContext('2d');
+    let animFondoId = null;
+
+    let mousePos = { x: -9999, y: -9999 };
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mousePos.x = e.clientX - rect.left;
+      mousePos.y = e.clientY - rect.top;
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      mousePos.x = -9999;
+      mousePos.y = -9999;
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+      if (e.button !== 0 || !modoManualActivo) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      for (let i = objetosFisicos.length - 1; i >= 0; i--) {
+        const obj = objetosFisicos[i];
+        if (!obj.viva) continue;
+
+        const distancia = Math.hypot(clickX - obj.x, clickY - obj.y);
+        if (distancia <= obj.radio + 8) {
+          explotarFigura(obj, true);
+          break;
+        }
+      }
+    });
+
+    function ajustarCanvasFondo() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', ajustarCanvasFondo);
+
+    let particulasExplosion = [];
+
+    function crearParticulas(x, y, color) {
+      for (let i = 0; i < 35; i++) {
+        const angulo = Math.random() * Math.PI * 2;
+        const rapidez = 2 + Math.random() * 7;
+        particulasExplosion.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angulo) * rapidez,
+          vy: Math.sin(angulo) * rapidez,
+          radio: 2 + Math.random() * 4,
+          color: color,
+          alfa: 1,
+          vida: 1
+        });
+      }
+    }
+
+    const CONFIG_CATEGORIAS = {
+      puerta: { icono: '🚪', radio: 50, masa: 1.4, colorGlow: '#00f0ff', colorFondo: '#081730' },
+      corazon: { icono: '❤️', radio: 52, masa: 1.3, colorGlow: '#ff0055', colorFondo: '#2a0515' },
+      carta: { icono: '✉️', radio: 48, masa: 1.0, colorGlow: '#ffe600', colorFondo: '#282305' },
+      pluma: { icono: '✒️', radio: 48, masa: 1.0, colorGlow: '#40E0D0', colorFondo: '#062024' }
+    };
+
+    let objetosFisicos = [];
+    const MAX_POR_CATEGORIA = 20;
+    let categoriaActivaMultiplicando = null;
+    let modoManualActivo = false;
+
+    let conteoExplosiones = { puerta: 0, corazon: 0, carta: 0, pluma: 0 };
+
+    function actualizarMarcadorExplosiones() {
+      for (const cat in conteoExplosiones) {
+        const el = document.getElementById(`cnt-${cat}`);
+        if (el) {
+          const val = conteoExplosiones[cat];
+          if (modoManualActivo && val > MAX_POR_CATEGORIA) {
+            el.innerHTML = `<span class="marcador-infinito">${val} ⚡</span>`;
+          } else if (val >= MAX_POR_CATEGORIA) {
+            el.innerHTML = `<span class="marcador-max">${val}/20 ★</span>`;
+          } else {
+            el.innerText = `${val}/20`;
+          }
+        }
+      }
+
+      if (rolActual === 'admin' && modoAdminSeleccionado === 'admin') {
+        const btnDetener = document.getElementById('btn-detener-figuras');
+        if (btnDetener && !modoManualActivo) {
+          btnDetener.classList.remove('oculto');
+        }
+      } else {
+        const todasEnMaximo = Object.values(conteoExplosiones).every(val => val >= MAX_POR_CATEGORIA);
+        const btnDetener = document.getElementById('btn-detener-figuras');
+        if (btnDetener) {
+          if (todasEnMaximo && !modoManualActivo) {
+            btnDetener.classList.remove('oculto');
+          } else if (modoManualActivo) {
+            btnDetener.classList.add('oculto');
+          }
+        }
+      }
+    }
+
+    function detenerTodasLasFiguras() {
+      modoManualActivo = true;
+      document.getElementById('btn-detener-figuras').classList.add('oculto');
+      actualizarMarcadorExplosiones();
+
+      objetosFisicos.forEach(obj => { obj.hoverTiempo = 0; });
+      alert('⏹ Modo manual activado: Las figuras continúan moviéndose y multiplicándose. ¡Al pasar el cursor sobre una se detendrá y al hacer clic izquierdo seguirá contando más allá de 20!');
+    }
+
+    function inicializarObjetos() {
+      modoManualActivo = false;
+      particulasExplosion = [];
+      categoriaActivaMultiplicando = null;
+      conteoExplosiones = { puerta: 0, corazon: 0, carta: 0, pluma: 0 };
+      actualizarMarcadorExplosiones();
+
+      objetosFisicos = [
+        crearFigura('puerta', 130, 170, 1.7, 1.3, false),
+        crearFigura('corazon', 290, 450, -1.5, 1.8, false),
+        crearFigura('carta', 660, 220, 1.6, -1.6, false),
+        crearFigura('pluma', 840, 490, -1.8, -1.4, false)
+      ];
+    }
+
+    function crearFigura(categoria, x, y, vx, vy, esClon = false) {
+      const cfg = CONFIG_CATEGORIAS[categoria];
+      return {
+        id: Math.random().toString(36).substr(2, 9),
+        categoria: categoria,
+        icono: cfg.icono,
+        x: x,
+        y: y,
+        vx: vx,
+        vy: vy,
+        radio: cfg.radio,
+        masa: cfg.masa,
+        t: Math.random() * 10,
+        freq: 0.035 + Math.random() * 0.02,
+        amp: 1.6 + Math.random() * 0.6,
+        colorGlow: cfg.colorGlow,
+        colorFondo: cfg.colorFondo,
+        hoverTiempo: 0,
+        esClon: esClon,
+        viva: true
+      };
+    }
+
+    function generarDesdeBorde(categoria) {
+      const cfg = CONFIG_CATEGORIAS[categoria];
+      const borde = Math.floor(Math.random() * 4);
+      let x, y, vx, vy;
+
+      if (borde === 0) {
+        x = Math.random() * canvas.width;
+        y = -cfg.radio;
+        vx = (Math.random() - 0.5) * 3;
+        vy = 1.5 + Math.random() * 2;
+      } else if (borde === 1) {
+        x = canvas.width + cfg.radio;
+        y = Math.random() * canvas.height;
+        vx = -(1.5 + Math.random() * 2);
+        vy = (Math.random() - 0.5) * 3;
+      } else if (borde === 2) {
+        x = Math.random() * canvas.width;
+        y = canvas.height + cfg.radio;
+        vx = (Math.random() - 0.5) * 3;
+        vy = -(1.5 + Math.random() * 2);
+      } else {
+        x = -cfg.radio;
+        y = Math.random() * canvas.height;
+        vx = 1.5 + Math.random() * 2;
+        vy = (Math.random() - 0.5) * 3;
+      }
+
+      return crearFigura(categoria, x, y, vx, vy, true);
+    }
+
+    function explotarFigura(figura, esManualClick = false) {
+      if (!figura.viva) return;
+      figura.viva = false;
+      crearParticulas(figura.x, figura.y, figura.colorGlow);
+
+      if (modoManualActivo && esManualClick) {
+        conteoExplosiones[figura.categoria]++;
+      } else if (conteoExplosiones[figura.categoria] < MAX_POR_CATEGORIA) {
+        conteoExplosiones[figura.categoria]++;
+      }
+      actualizarMarcadorExplosiones();
+
+      categoriaActivaMultiplicando = figura.categoria;
+
+      setTimeout(() => {
+        if (categoriaActivaMultiplicando === figura.categoria) {
+          const cantidadCategoriaViva = objetosFisicos.filter(o => o.viva && o.categoria === figura.categoria).length;
+          const cuposDisponibles = MAX_POR_CATEGORIA - cantidadCategoriaViva;
+
+          const aGenerar = Math.max(0, Math.min(2, cuposDisponibles));
+          for (let i = 0; i < aGenerar; i++) {
+            objetosFisicos.push(generarDesdeBorde(figura.categoria));
+          }
+        }
+      }, 250);
+
+      if (figura.esClon && !modoManualActivo) {
+        const companeros = objetosFisicos.filter(o => o.viva && o.categoria === figura.categoria && o.id !== figura.id);
+        companeros.forEach((hermano, idx) => {
+          setTimeout(() => {
+            if (!modoManualActivo && categoriaActivaMultiplicando === figura.categoria) {
+              explotarFigura(hermano, false);
+            }
+          }, (idx + 1) * 220);
+        });
+      }
+    }
+
+    let ultimoTiempoFrame = performance.now();
+
+    function animarFondo(tiempoActual = performance.now()) {
+      const deltaSegundos = Math.min((tiempoActual - ultimoTiempoFrame) / 1000, 0.1);
+      ultimoTiempoFrame = tiempoActual;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = particulasExplosion.length - 1; i >= 0; i--) {
+        const p = particulasExplosion[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.96;
+        p.vy *= 0.96;
+        p.vida -= deltaSegundos * 1.5;
+
+        if (p.vida <= 0) {
+          particulasExplosion.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.vida);
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radio, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      objetosFisicos = objetosFisicos.filter(o => o.viva);
+
+      objetosFisicos.forEach(obj => {
+        const distMouse = Math.hypot(mousePos.x - obj.x, mousePos.y - obj.y);
+        obj.hovered = distMouse <= obj.radio + 8;
+
+        if (!modoManualActivo) {
+          if (obj.hovered) {
+            obj.hoverTiempo += deltaSegundos;
+            const intensidad = 8 + (obj.hoverTiempo / 9) * 14;
+            obj.shakeX = (Math.random() - 0.5) * intensidad;
+            obj.shakeY = (Math.random() - 0.5) * intensidad;
+
+            if (obj.hoverTiempo >= 9) {
+              explotarFigura(obj, false);
+              return;
+            }
+          } else {
+            obj.hoverTiempo = Math.max(0, obj.hoverTiempo - deltaSegundos * 2);
+            obj.shakeX = 0;
+            obj.shakeY = 0;
+          }
+        } else {
+          obj.hoverTiempo = 0;
+          obj.shakeX = 0;
+          obj.shakeY = 0;
+        }
+
+        if (!obj.hovered) {
+          obj.t += obj.freq;
+          const oscX = Math.cos(obj.t) * obj.amp;
+          const oscY = Math.sin(obj.t) * obj.amp;
+
+          obj.x += obj.vx + oscX;
+          obj.y += obj.vy + oscY;
+        }
+
+        if (obj.x - obj.radio < 0) {
+          obj.x = obj.radio;
+          obj.vx = Math.abs(obj.vx) * (0.95 + Math.random() * 0.1);
+        } else if (obj.x + obj.radio > canvas.width) {
+          obj.x = canvas.width - obj.radio;
+          obj.vx = -Math.abs(obj.vx) * (0.95 + Math.random() * 0.1);
+        }
+
+        if (obj.y - obj.radio < 0) {
+          obj.y = obj.radio;
+          obj.vy = Math.abs(obj.vy) * (0.95 + Math.random() * 0.1);
+        } else if (obj.y + obj.radio > canvas.height) {
+          obj.y = canvas.height - obj.radio;
+          obj.vy = -Math.abs(obj.vy) * (0.95 + Math.random() * 0.1);
+        }
+      });
+
+      for (let i = 0; i < objetosFisicos.length; i++) {
+        for (let j = i + 1; j < objetosFisicos.length; j++) {
+          const o1 = objetosFisicos[i];
+          const o2 = objetosFisicos[j];
+
+          if (!o1.viva || !o2.viva) continue;
+
+          const dx = o2.x - o1.x;
+          const dy = o2.y - o1.y;
+          const distancia = Math.hypot(dx, dy);
+          const minColision = o1.radio + o2.radio;
+
+          if (distancia < minColision && distancia > 0) {
+            const nx = dx / distancia;
+            const ny = dy / distancia;
+
+            const solapamiento = minColision - distancia;
+            if (!o1.hovered) {
+              o1.x -= nx * (solapamiento / 2);
+              o1.y -= ny * (solapamiento / 2);
+            }
+            if (!o2.hovered) {
+              o2.x += nx * (solapamiento / 2);
+              o2.y += ny * (solapamiento / 2);
+            }
+
+            const kx = o1.vx - o2.vx;
+            const ky = o1.vy - o2.vy;
+            const velRelativaNormal = kx * nx + ky * ny;
+
+            if (velRelativaNormal > 0) {
+              const impulso = (2 * velRelativaNormal) / (o1.masa + o2.masa);
+              if (!o1.hovered) {
+                o1.vx -= impulso * o2.masa * nx;
+                o1.vy -= impulso * o2.masa * ny;
+                o1.t += Math.PI / 3;
+              }
+              if (!o2.hovered) {
+                o2.vx += impulso * o1.masa * nx;
+                o2.vy += impulso * o1.masa * ny;
+                o2.t -= Math.PI / 3;
+              }
+            }
+          }
+        }
+      }
+
+      objetosFisicos.forEach(obj => {
+        if (!obj.viva) return;
+
+        ctx.save();
+        const posX = obj.x + (obj.shakeX || 0);
+        const posY = obj.y + (obj.shakeY || 0);
+        ctx.translate(posX, posY);
+
+        const rotacion = (obj.hovered && !modoManualActivo)
+          ? (Math.random() - 0.5) * (0.35 + (obj.hoverTiempo / 9) * 0.4) 
+          : Math.sin(obj.t * 0.7) * 0.22;
+        ctx.rotate(rotacion);
+
+        ctx.shadowColor = obj.colorGlow;
+        ctx.shadowBlur = (obj.hovered && !modoManualActivo) ? (35 + (obj.hoverTiempo / 9) * 25) : 26;
+
+        ctx.fillStyle = obj.colorFondo;
+        ctx.beginPath();
+        ctx.arc(0, 0, obj.radio, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = obj.colorGlow;
+        ctx.lineWidth = obj.hovered ? 4.5 : 3;
+        ctx.stroke();
+
+        if (!modoManualActivo && obj.hoverTiempo > 0) {
+          const progreso = Math.min(1, obj.hoverTiempo / 9);
+          ctx.strokeStyle = '#ffe600';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(0, 0, obj.radio + 5, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * progreso));
+          ctx.stroke();
+        }
+
+        ctx.font = `${obj.radio * 1.3}px 'Segoe UI Emoji', sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(obj.icono, 0, 0);
+
+        ctx.restore();
+      });
+
+      animFondoId = requestAnimationFrame(animarFondo);
+    }
+
+    function iniciarAnimacionFondo() {
+      detenerAnimacionFondo();
+      ajustarCanvasFondo();
+      if (objetosFisicos.length === 0) inicializarObjetos();
+      ultimoTiempoFrame = performance.now();
+      animFondoId = requestAnimationFrame(animarFondo);
+    }
+
+    function detenerAnimacionFondo() {
+      if (animFondoId) {
+        cancelAnimationFrame(animFondoId);
+        animFondoId = null;
+      }
+    }
+
+    // ================= CAPÍTULO 2: ESCAPE ROOM (5 NIVELES CORREGIDOS) =================
+    const canvasEscape = document.getElementById('canvas-escape-room');
+    const ctxEscape = canvasEscape.getContext('2d');
+    let escapeAnimId = null;
+
+    let nivelActualEscape = 0; 
+
+    const vincentChibi = {
+      x: 380,
+      y: 280,
+      ancho: 28,
+      alto: 32,
+      velocidad: 3.5,
+      direccion: 'abajo',
+      caminando: false,
+      pasoAnim: 0,
+      pasoTimer: 0
+    };
+
+    let inventarioSala1 = [];
+    let slotSeleccionadoIndex = 0;
+    const teclasEscape = {};
+
+    let dialogoActivo = false;
+    let colaDialogos = [];
+
+    function mostrarDialogo(remitente, texto) {
+      colaDialogos.push({ remitente, texto });
+      if (!dialogoActivo) {
+        avanzarDialogo();
+      }
+    }
+
+    function avanzarDialogo() {
+      if (colaDialogos.length === 0) {
+        dialogoActivo = false;
+        document.getElementById('escape-dialogo-box').classList.add('oculto');
+        for (const k in teclasEscape) delete teclasEscape[k];
+        return;
+      }
+
+      dialogoActivo = true;
+      const actual = colaDialogos.shift();
+      document.getElementById('dialogo-remitente').innerText = actual.remitente;
+      document.getElementById('dialogo-texto').innerText = actual.texto;
+      document.getElementById('escape-dialogo-box').classList.remove('oculto');
+      
+      for (const k in teclasEscape) delete teclasEscape[k];
+    }
+
+    window.addEventListener('keydown', (e) => {
+      const k = e.key.toLowerCase();
+      
+      if (dialogoActivo) {
+        if (k === 'e' || k === 'enter' || k === ' ') {
+          avanzarDialogo();
+        }
+        return; 
+      }
+
+      if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'e'].includes(k)) {
+        if (k === 'e') {
+          ejecutarInteraccionE();
+        } else {
+          teclasEscape[k] = true;
+        }
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      const k = e.key.toLowerCase();
+      if (teclasEscape[k]) {
+        delete teclasEscape[k];
+      }
+    });
+
+    function seleccionarSlotInventario(index) {
+      if (dialogoActivo) return;
+      slotSeleccionadoIndex = index;
+      renderizarInventarioEscape();
+    }
+
+    function renderizarInventarioEscape() {
+      for (let i = 0; i < 4; i++) {
+        const slotEl = document.getElementById(`slot-${i + 1}`);
+        slotEl.innerHTML = '';
+        slotEl.classList.remove('seleccionado');
+
+        if (i === slotSeleccionadoIndex) {
+          slotEl.classList.add('seleccionado');
+        }
+
+        if (inventarioSala1[i]) {
+          if (inventarioSala1[i] === 'llave') slotEl.innerText = '🗝️';
+          if (inventarioSala1[i] === 'palanca') slotEl.innerText = '🔧';
+        }
+      }
+    }
+
+    function iniciarJuegoEscapeRoom() {
+      cargarNivelEscape(0);
+      detenerJuegoEscapeRoom();
+      escapeAnimId = requestAnimationFrame(bucleEscapeRoom);
+    }
+
+    function detenerJuegoEscapeRoom() {
+      if (escapeAnimId) {
+        cancelAnimationFrame(escapeAnimId);
+        escapeAnimId = null;
+      }
+      for (const k in teclasEscape) delete teclasEscape[k];
+    }
+
+    let nivelDatos = {};
+
+    function cargarNivelEscape(idx) {
+      nivelActualEscape = idx;
+      vincentChibi.x = 380;
+      vincentChibi.y = 280;
+      inventarioSala1 = [];
+      slotSeleccionadoIndex = 0;
+      renderizarInventarioEscape();
+
+      document.getElementById('hud-nivel-texto').innerText = `1-${idx}`;
+
+      if (idx === 0) {
+        nivelDatos = {
+          muebles: [
+            { x: 100, y: 100, ancho: 70, alto: 120, tipo: 'estante', color: '#1a100b', inspeccionado: false, recompensaOculta: 'llave' },
+            { x: 590, y: 100, ancho: 70, alto: 120, tipo: 'estante', color: '#1a100b', inspeccionado: false },
+            { x: 280, y: 150, ancho: 200, alto: 45, tipo: 'mesa', color: '#2d1b11' }
+          ],
+          llave: { x: 210, y: 240, ancho: 26, alto: 26, recolectada: false, visible: false }, 
+          puerta: { x: 340, y: 45, ancho: 80, alto: 50, abierta: false, requiereLlave: true }
+        };
+      } else if (idx === 1) {
+        // Nivel 1-1 (Índice 1): Puzle de caja móvil sobre placa de presión
+        nivelDatos = {
+          muebles: [
+            { x: 150, y: 100, ancho: 80, alto: 200, tipo: 'estante', color: '#1a100b' }
+          ],
+          cajaMovil: { x: 300, y: 220, ancho: 45, alto: 45 },
+          placaPresion: { x: 300, y: 140, ancho: 45, alto: 45, activada: false },
+          hojaPared: { x: 380, y: 45, ancho: 24, alto: 28, leida: false, texto: 'Pista en la pared: "El peso es la clave para liberar el mecanismo inferior."' },
+          puerta: { x: 340, y: 45, ancho: 80, alto: 50, abierta: false, requiereLlave: false, requiereBoton: true }
+        };
+      } else if (idx === 2) {
+        // Nivel 1-2 (Índice 2): Puzle de estante + palanca en mecanismo de pared
+        nivelDatos = {
+          muebles: [
+            { x: 120, y: 110, ancho: 60, alto: 100, tipo: 'estante', color: '#1a100b', inspeccionado: false, recompensaOculta: 'palanca' },
+            { x: 580, y: 110, ancho: 60, alto: 100, tipo: 'estante', color: '#1a100b', inspeccionado: false }
+          ],
+          palancaItem: { x: 210, y: 240, ancho: 26, alto: 26, recolectada: false, visible: false },
+          mecanismoPared: { x: 372, y: 55, ancho: 25, alto: 25, activado: false },
+          puerta: { x: 340, y: 45, ancho: 80, alto: 50, abierta: false, requiereLlave: false }
+        };
+      } else if (idx === 3) {
+        // Nivel 1-3 (Índice 3): Puzle de código numérico en panel
+        nivelDatos = {
+          muebles: [
+            { x: 220, y: 130, ancho: 320, alto: 50, tipo: 'mesa', color: '#241710' }
+          ],
+          panelSeguridad: { x: 360, y: 55, ancho: 40, alto: 25, desbloqueado: false },
+          puerta: { x: 340, y: 45, ancho: 80, alto: 50, abierta: false, requiereLlave: false }
+        };
+      } else if (idx === 4) {
+        // Nivel 1-4 (Índice 4): Puzle maestro combinado
+        nivelDatos = {
+          muebles: [
+            { x: 100, y: 100, ancho: 60, alto: 140, tipo: 'estante', color: '#150c08', inspeccionado: false, recompensaOculta: 'llave' }
+          ],
+          cajaMovil: { x: 450, y: 220, ancho: 40, alto: 40 },
+          placaPresion: { x: 450, y: 130, ancho: 40, alto: 40, activada: false },
+          llave: { x: 210, y: 250, ancho: 26, alto: 26, recolectada: false, visible: false },
+          hojaPared: { x: 480, y: 45, ancho: 24, alto: 28, leida: false, texto: 'Pista final en la pared: "Combina el peso sobre el suelo y la llave dorada en la cerradura."' },
+          puerta: { x: 340, y: 45, ancho: 80, alto: 50, abierta: false, requiereLlave: true }
+        };
+      }
+      
+      mostrarDialogo("VINCENT", `Sala 1-${idx}. Debo observar bien mi entorno para escapar.`);
+    }
+
+    function actualizarVincentChibi() {
+      if (dialogoActivo) return;
+
+      let vx = 0;
+      let vy = 0;
+
+      if (teclasEscape['w'] || teclasEscape['arrowup']) vy -= vincentChibi.velocidad;
+      if (teclasEscape['s'] || teclasEscape['arrowdown']) vy += vincentChibi.velocidad;
+      if (teclasEscape['a'] || teclasEscape['arrowleft']) vx -= vincentChibi.velocidad;
+      if (teclasEscape['d'] || teclasEscape['arrowright']) vx += vincentChibi.velocidad;
+
+      if (vx < 0) vincentChibi.direccion = 'izquierda';
+      else if (vx > 0) vincentChibi.direccion = 'derecha';
+      else if (vy < 0) vincentChibi.direccion = 'arriba';
+      else if (vy > 0) vincentChibi.direccion = 'abajo';
+
+      vincentChibi.caminando = (vx !== 0 || vy !== 0);
+
+      if (vincentChibi.caminando) {
+        vincentChibi.pasoTimer++;
+        if (vincentChibi.pasoTimer % 8 === 0) {
+          vincentChibi.pasoAnim = (vincentChibi.pasoAnim + 1) % 2;
+        }
+      } else {
+        vincentChibi.pasoAnim = 0;
+        vincentChibi.pasoTimer = 0;
+      }
+
+      if (nivelDatos.cajaMovil) {
+        const c = nivelDatos.cajaMovil;
+        if (
+          vincentChibi.x + vx < c.x + c.ancho &&
+          vincentChibi.x + vincentChibi.ancho + vx > c.x &&
+          vincentChibi.y + vy < c.y + c.alto &&
+          vincentChibi.y + vincentChibi.alto + vy > c.y
+        ) {
+          let nx = c.x + vx;
+          let ny = c.y + vy;
+          if (!comprobarColisionMueblesEx(nx, ny, c.ancho, c.alto)) {
+            c.x = nx;
+            c.y = ny;
+
+            if (nivelDatos.placaPresion) {
+              const p = nivelDatos.placaPresion;
+              if (c.x < p.x + p.ancho && c.x + c.ancho > p.x && c.y < p.y + p.alto && c.y + c.alto > p.y) {
+                p.activada = true;
+              } else {
+                p.activada = false;
+              }
+            }
+          }
+        }
+      }
+
+      if (!comprobionColisionBox(vincentChibi.x + vx, vincentChibi.y, vincentChibi.ancho, vincentChibi.alto)) {
+        vincentChibi.x += vx;
+      }
+      if (!comprobionColisionBox(vincentChibi.x, vincentChibi.y + vy, vincentChibi.ancho, vincentChibi.alto)) {
+        vincentChibi.y += vy;
+      }
+
+      if (nivelDatos.llave && nivelDatos.llave.visible && !nivelDatos.llave.recolectada) {
+        const l = nivelDatos.llave;
+        if (Math.hypot(vincentChibi.x + vincentChibi.ancho/2 - l.x, vincentChibi.y + vincentChibi.alto/2 - l.y) < 32) {
+          if (inventarioSala1.length < 4) {
+            l.recolectada = true;
+            inventarioSala1.push('llave');
+            renderizarInventarioEscape();
+            mostrarDialogo("SISTEMA", "Has obtenido una [Llave Antigua].");
+          }
+        }
+      }
+
+      if (nivelDatos.palancaItem && nivelDatos.palancaItem.visible && !nivelDatos.palancaItem.recolectada) {
+        const pi = nivelDatos.palancaItem;
+        if (Math.hypot(vincentChibi.x + vincentChibi.ancho/2 - pi.x, vincentChibi.y + vincentChibi.alto/2 - pi.y) < 32) {
+          if (inventarioSala1.length < 4) {
+            pi.recolectada = true;
+            inventarioSala1.push('palanca');
+            renderizarInventarioEscape();
+            mostrarDialogo("SISTEMA", "Has obtenido una [Palanca de Hierro].");
+          }
+        }
+      }
+    }
+
+    function comprobarColisionMueblesEx(nx, ny, w, h) {
+      const margen = 45;
+      if (nx < margen || nx + w > canvasEscape.width - margen) return true;
+      if (ny < margen + 10 || ny + h > canvasEscape.height - margen) return true;
+
+      if (nivelDatos.muebles) {
+        for (let m of nivelDatos.muebles) {
+          if (nx < m.x + m.ancho && nx + w > m.x && ny < m.y + m.alto && ny + h > m.y) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    function comprobionColisionBox(nx, ny, w, h) {
+      if (comprobarColisionMueblesEx(nx, ny, w, h)) return true;
+
+      if (nivelDatos.cajaMovil) {
+        const c = nivelDatos.cajaMovil;
+        if (nx < c.x + c.ancho && nx + w > c.x && ny < c.y + c.alto && ny + h > c.y) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function ejecutarInteraccionE() {
+      let frenteX = vincentChibi.x + vincentChibi.ancho / 2;
+      let frenteY = vincentChibi.y + vincentChibi.alto / 2;
+
+      if (vincentChibi.direccion === 'abajo') frenteY += 25;
+      else if (vincentChibi.direccion === 'arriba') frenteY -= 25;
+      else if (vincentChibi.direccion === 'izquierda') frenteX -= 25;
+      else if (vincentChibi.direccion === 'derecha') frenteX += 25;
+
+      // 1. Leer hoja en la pared
+      if (nivelDatos.hojaPared && !nivelDatos.hojaPared.leida) {
+        const hp = nivelDatos.hojaPared;
+        if (Math.hypot(frenteX - hp.x, frenteY - hp.y) < 45) {
+          mostrarDialogo("NOTA EN PARED", hp.texto);
+          nivelDatos.hojaPared.leida = true;
+          return;
+        }
+      }
+
+      // 2. Examinar estantes
+      if (nivelDatos.muebles) {
+        for (let m of nivelDatos.muebles) {
+          if (frenteX >= m.x - 20 && frenteX <= m.x + m.ancho + 20 && frenteY >= m.y - 20 && frenteY <= m.y + m.alto + 20) {
+            if (m.recompensaOculta && !m.inspeccionado) {
+              m.inspeccionado = true;
+              if (m.recompensaOculta === 'llave' && nivelDatos.llave) {
+                nivelDatos.llave.visible = true;
+                mostrarDialogo("VINCENT", "¡Escuché algo caer al piso! Un objeto metálico se deslizó fuera del estante.");
+              } else if (m.recompensaOculta === 'palanca' && nivelDatos.palancaItem) {
+                nivelDatos.palancaItem.visible = true;
+                mostrarDialogo("VINCENT", "Una palanca cayó al suelo tras revisar el estante.");
+              }
+              return;
+            } else {
+              mostrarDialogo("VINCENT", "Un mueble de madera pesado y polvoriento.");
+              return;
+            }
+          }
+        }
+      }
+
+      // 3. Mecanismo de pared (Sala 1-2)
+      if (nivelDatos.mecanismoPared) {
+        const mp = nivelDatos.mecanismoPared;
+        if (Math.hypot(frenteX - (mp.x + mp.ancho/2), frenteY - (mp.y + mp.alto/2)) < 45) {
+          const itemSel = inventarioSala1[slotSeleccionadoIndex];
+          if (itemSel === 'palanca') {
+            mp.activado = true;
+            mostrarDialogo("VINCENT", "Encajé la palanca en la ranura. El mecanismo engranó.");
+          } else {
+            mostrarDialogo("VINCENT", "Hay un receptáculo vacío. Necesita una herramienta.");
+          }
+          return;
+        }
+      }
+
+      // 4. Panel de seguridad
+      if (nivelDatos.panelSeguridad && !nivelDatos.panelSeguridad.desbloqueado) {
+        const ps = nivelDatos.panelSeguridad;
+        if (Math.hypot(frenteX - (ps.x + ps.ancho/2), frenteY - (ps.y + ps.alto/2)) < 45) {
+          let codigo = prompt('Introduce el código numérico de seguridad:');
+          if (codigo === '482') {
+            ps.desbloqueado = true;
+            mostrarDialogo("SISTEMA", "Código verificado con éxito. Puerta desbloqueada.");
+          } else if (codigo !== null) {
+            mostrarDialogo("SISTEMA", "Código erróneo.");
+          }
+          return;
+        }
+      }
+
+      // 5. Puerta de salida (Validación corregida y estricta por nivel actual)
+      const p = nivelDatos.puerta;
+      if (Math.hypot(frenteX - (p.x + p.ancho/2), frenteY - (p.y + p.alto/2)) < 50) {
+        const itemSeleccionado = inventarioSala1[slotSeleccionadoIndex];
+        let pasar = false;
+
+        if (nivelActualEscape === 0) {
+          // Sala 1-0: Requiere llave
+          if (itemSeleccionado === 'llave') pasar = true;
+          else { mostrarDialogo("VINCENT", "La puerta está cerrada con llave."); return; }
+        } else if (nivelActualEscape === 1) {
+          // Sala 1-1: Requiere placa de presión activada con la caja
+          if (nivelDatos.placaPresion && nivelDatos.placaPresion.activada) pasar = true;
+          else { mostrarDialogo("VINCENT", "La puerta sigue bloqueada. Algo debe presionar el suelo."); return; }
+        } else if (nivelActualEscape === 2) {
+          // Sala 1-2: Requiere mecanismo de pared accionado con la palanca
+          if (nivelDatos.mecanismoPared && nivelDatos.mecanismoPared.activado) pasar = true;
+          else { mostrarDialogo("VINCENT", "El mecanismo de la pared no ha sido accionado con la palanca."); return; }
+        } else if (nivelActualEscape === 3) {
+          // Sala 1-3: Requiere panel de seguridad desbloqueado
+          if (nivelDatos.panelSeguridad && nivelDatos.panelSeguridad.desbloqueado) pasar = true;
+          else { mostrarDialogo("VINCENT", "El panel electrónico digital bloquea la salida."); return; }
+        } else if (nivelActualEscape === 4) {
+          // Sala 1-4: Requiere placa de presión activada + llave
+          if (nivelDatos.placaPresion && nivelDatos.placaPresion.activada && itemSeleccionado === 'llave') pasar = true;
+          else { mostrarDialogo("VINCENT", "Se requiere activar el panel de suelo y usar la llave final."); return; }
+        }
+
+        if (pasar && !p.abierta) {
+          p.abierta = true;
+          mostrarDialogo("VINCENT", `Sala 1-${nivelActualEscape} superada con éxito.`);
+          setTimeout(() => {
+            if (nivelActualEscape < 4) {
+              cargarNivelEscape(nivelActualEscape + 1);
+            } else {
+              alert('🏆 ¡Has superado todos los niveles del Escape Room!');
+              volverAlMenu();
+            }
+          }, 1200);
+        }
+      }
+    }
+
+    function dibujarHabitacionEscape() {
+      const tamBaldosa = 40;
+      for (let x = 0; x < canvasEscape.width; x += tamBaldosa) {
+        for (let y = 0; y < canvasEscape.height; y += tamBaldosa) {
+          ctxEscape.fillStyle = ((x / tamBaldosa + y / tamBaldosa) % 2 === 0) ? '#100a14' : '#171021';
+          ctxEscape.fillRect(x, y, tamBaldosa, tamBaldosa);
+          ctxEscape.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+          ctxEscape.strokeRect(x, y, tamBaldosa, tamBaldosa);
+        }
+      }
+
+      ctxEscape.fillStyle = 'rgba(75, 12, 28, 0.6)';
+      ctxEscape.fillRect(180, 110, 400, 220);
+      ctxEscape.strokeStyle = '#2b0914';
+      ctxEscape.lineWidth = 2;
+      ctxEscape.strokeRect(180, 110, 400, 220);
+
+      if (nivelDatos.placaPresion) {
+        const pp = nivelDatos.placaPresion;
+        ctxEscape.fillStyle = pp.activada ? '#27ae60' : '#7f8c8d';
+        ctxEscape.fillRect(pp.x, pp.y, pp.ancho, pp.alto);
+        ctxEscape.strokeStyle = '#2c3e50';
+        ctxEscape.lineWidth = 3;
+        ctxEscape.strokeRect(pp.x, pp.y, pp.ancho, pp.alto);
+      }
+
+      if (nivelDatos.muebles) {
+        nivelDatos.muebles.forEach(m => {
+          ctxEscape.fillStyle = m.color;
+          ctxEscape.fillRect(m.x, m.y, m.ancho, m.alto);
+          ctxEscape.strokeStyle = '#120805';
+          ctxEscape.lineWidth = 3;
+          ctxEscape.strokeRect(m.x, m.y, m.ancho, m.alto);
+          
+          if (m.tipo === 'estante') {
+            ctxEscape.fillStyle = '#120805';
+            ctxEscape.fillRect(m.x + 6, m.y + 25, m.ancho - 12, 5);
+            ctxEscape.fillRect(m.x + 6, m.y + 65, m.ancho - 12, 5);
+          }
+        });
+      }
+
+      if (nivelDatos.cajaMovil) {
+        const c = nivelDatos.cajaMovil;
+        ctxEscape.fillStyle = '#4a3319';
+        ctxEscape.fillRect(c.x, c.y, c.ancho, c.alto);
+        ctxEscape.strokeStyle = '#211508';
+        ctxEscape.lineWidth = 3;
+        ctxEscape.strokeRect(c.x, c.y, c.ancho, c.alto);
+        ctxEscape.beginPath();
+        ctxEscape.moveTo(c.x, c.y); ctxEscape.lineTo(c.x + c.ancho, c.y + c.alto);
+        ctxEscape.moveTo(c.x + c.ancho, c.y); ctxEscape.lineTo(c.x, c.y + c.alto);
+        ctxEscape.strokeStyle = '#211508';
+        ctxEscape.lineWidth = 2;
+        ctxEscape.stroke();
+      }
+
+      if (nivelDatos.mecanismoPared) {
+        const mp = nivelDatos.mecanismoPared;
+        ctxEscape.fillStyle = mp.activado ? '#27ae60' : '#4a3b32';
+        ctxEscape.fillRect(mp.x, mp.y, mp.ancho, mp.alto);
+        ctxEscape.strokeStyle = '#1a100a';
+        ctxEscape.lineWidth = 2;
+        ctxEscape.strokeRect(mp.x, mp.y, mp.ancho, mp.alto);
+      }
+
+      if (nivelDatos.panelSeguridad) {
+        const ps = nivelDatos.panelSeguridad;
+        ctxEscape.fillStyle = ps.desbloqueado ? '#27ae60' : '#34495e';
+        ctxEscape.fillRect(ps.x, ps.y, ps.ancho, ps.alto);
+        ctxEscape.strokeStyle = '#111111';
+        ctxEscape.lineWidth = 2;
+        ctxEscape.strokeRect(ps.x, ps.y, ps.ancho, ps.alto);
+      }
+
+      if (nivelDatos.hojaPared) {
+        const hp = nivelDatos.hojaPared;
+        ctxEscape.fillStyle = '#f5eedc';
+        ctxEscape.fillRect(hp.x, hp.y, hp.ancho, hp.alto);
+        ctxEscape.strokeStyle = '#b8a885';
+        ctxEscape.lineWidth = 1;
+        ctxEscape.strokeRect(hp.x, hp.y, hp.ancho, hp.alto);
+      }
+
+      if (nivelDatos.llave && nivelDatos.llave.visible && !nivelDatos.llave.recolectada) {
+        ctxEscape.save();
+        ctxEscape.font = '26px sans-serif';
+        ctxEscape.fillText('🗝️', nivelDatos.llave.x - 13, nivelDatos.llave.y + 9);
+        ctxEscape.restore();
+      }
+
+      if (nivelDatos.palancaItem && nivelDatos.palancaItem.visible && !nivelDatos.palancaItem.recolectada) {
+        ctxEscape.save();
+        ctxEscape.font = '26px sans-serif';
+        ctxEscape.fillText('🔧', nivelDatos.palancaItem.x - 13, nivelDatos.palancaItem.y + 9);
+        ctxEscape.restore();
+      }
+
+      const grosor = 45;
+      ctxEscape.fillStyle = '#07030d';
+      ctxEscape.fillRect(0, 0, canvasEscape.width, grosor + 10);
+      ctxEscape.fillRect(0, canvasEscape.height - grosor, canvasEscape.width, grosor);
+      ctxEscape.fillRect(0, 0, grosor, canvasEscape.height);
+      ctxEscape.fillRect(canvasEscape.width - grosor, 0, grosor, canvasEscape.height);
+
+      const p = nivelDatos.puerta;
+      ctxEscape.fillStyle = p.abierta ? '#1b4a22' : '#3d1c13';
+      ctxEscape.fillRect(p.x, p.y, p.ancho, p.alto);
+      ctxEscape.strokeStyle = '#180a06';
+      ctxEscape.lineWidth = 4;
+      ctxEscape.strokeRect(p.x, p.y, p.ancho, p.alto);
+      ctxEscape.fillStyle = '#d4af37';
+      ctxEscape.beginPath();
+      ctxEscape.arc(p.x + p.ancho - 12, p.y + p.alto / 2, 5, 0, Math.PI * 2);
+      ctxEscape.fill();
+
+      ctxEscape.strokeStyle = '#1d1526';
+      ctxEscape.lineWidth = 2;
+      ctxEscape.strokeRect(grosor, grosor + 10, canvasEscape.width - grosor * 2, canvasEscape.height - grosor * 2 - 10);
+    }
+
+    function dibujarVincentChibiHD() {
+      ctxEscape.save();
+      const cx = vincentChibi.x + vincentChibi.ancho / 2;
+      const cy = vincentChibi.y + vincentChibi.alto / 2;
+      const bounce = (vincentChibi.caminando && vincentChibi.pasoAnim === 1) ? -2 : 0;
+
+      ctxEscape.fillStyle = 'rgba(0, 0, 0, 0.45)';
+      ctxEscape.beginPath();
+      ctxEscape.ellipse(cx, cy + 16, 12, 5, 0, 0, Math.PI * 2);
+      ctxEscape.fill();
+
+      ctxEscape.fillStyle = '#f5f3fa';
+      ctxEscape.fillRect(cx - 8, cy - 2 + bounce, 16, 16);
+
+      ctxEscape.fillStyle = '#1c1826';
+      ctxEscape.fillRect(cx - 9, cy + bounce, 6, 14);
+      ctxEscape.fillRect(cx + 3, cy + bounce, 6, 14);
+
+      ctxEscape.fillStyle = '#b31027';
+      ctxEscape.fillRect(cx - 1.5, cy - 1 + bounce, 3, 9);
+
+      ctxEscape.fillStyle = '#ebd6c8';
+      ctxEscape.beginPath();
+      ctxEscape.arc(cx, cy - 12 + bounce, 13, 0, Math.PI * 2);
+      ctxEscape.fill();
+      ctxEscape.strokeStyle = '#3d261e';
+      ctxEscape.lineWidth = 1;
+      ctxEscape.stroke();
+
+      ctxEscape.fillStyle = '#171221';
+      ctxEscape.beginPath();
+      ctxEscape.arc(cx, cy - 15 + bounce, 13, Math.PI, Math.PI * 2);
+      ctxEscape.fill();
+      ctxEscape.fillRect(cx - 11, cy - 18 + bounce, 5, 6);
+      ctxEscape.fillRect(cx + 6, cy - 18 + bounce, 5, 6);
+
+      ctxEscape.fillStyle = '#947a7a';
+      ctxEscape.fillRect(cx - 7, cy - 10 + bounce, 4, 2);
+      ctxEscape.fillRect(cx + 3, cy - 10 + bounce, 4, 2);
+
+      ctxEscape.fillStyle = '#0d0814';
+      ctxEscape.fillRect(cx - 6, cy - 11 + bounce, 2, 2);
+      ctxEscape.fillRect(cx + 4, cy - 11 + bounce, 2, 2);
+
+      ctxEscape.restore();
+    }
+
+    function bucleEscapeRoom() {
+      actualizarVincentChibi();
+      ctxEscape.clearRect(0, 0, canvasEscape.width, canvasEscape.height);
+      dibujarHabitacionEscape();
+      dibujarVincentChibiHD();
+      escapeAnimId = requestAnimationFrame(bucleEscapeRoom);
+    }
+
+    // ================= BANCO DE PREGUNTAS =================
+    const todasLasPreguntas = [
+      { pregunta: "¿Cuántos años cumplimos juntos en esta celebración?", opciones: ["1 año", "2 años", "3 años", "5 años"], correcta: 2 },
+      { pregunta: "¿Qué color domina en el cartel neón animado?", opciones: ["Turquesa", "Rojo carmesí", "Amarillo puro", "Blanco tiza"], correcta: 0 },
+      { pregunta: "¿Cuál es el ritmo que nunca debe detenerse?", opciones: ["El vals", "El ritmo de la pista", "El silencio", "La alarma"], correcta: 1 },
+      { pregunta: "¿Qué elemento gigante resalta en el cielo del escenario?", opciones: ["Un asteroide", "La Luna", "Una Bola de Disco rosa", "Un dirigible"], correcta: 2 },
+      { pregunta: "¿Cuál es el mensaje que se repite con todo el corazón?", opciones: ["Hasta luego", "Te amo mucho más", "Quizás mañana", "Nos vemos"], correcta: 1 },
+      { pregunta: "¿En qué década se inspira la estética retro synthwave del club?", opciones: ["Años 20", "Años 50", "Años 80", "Año 2040"], correcta: 2 },
+      { pregunta: "¿Qué silueta reposa en el horizonte antes de la multitud?", opciones: ["Rascacielos", "Montañas", "Un bosque", "Olas de mar"], correcta: 1 },
+      { pregunta: "¿Cuántos segundos tienes en este desafío por pregunta?", opciones: ["10 segundos", "15 segundos", "30 segundos", "60 segundos"], correcta: 1 },
+      { pregunta: "¿Qué ocurre cuando dos personas que se aman bailan juntas?", opciones: ["Se detiene el tiempo", "Se cansan rápido", "Se apagan las luces", "Nada especial"], correcta: 0 },
+      { pregunta: "¿Quién es la persona favorita y más especial del mundo?", opciones: ["Tú ❤️", "Nadie", "Un desconocido", "El DJ"], correcta: 0 },
+      { pregunta: "¿Qué figura geométrica da profundidad a la pista de baile?", opciones: ["Círculos concéntricos", "Cuadrícula en perspectiva 3D", "Triángulos flotantes", "Espiral plana"], correcta: 1 },
+      { pregunta: "¿Qué color de acento tienen los focos cruzados en el cielo?", opciones: ["Cian brillante", "Verde oliva", "Gris humo", "Naranja óxido"], correcta: 0 },
+      { pregunta: "¿Cuál es el objetivo principal de este minijuego?", opciones: ["Celebrar nuestro amor", "Resolver ecuaciones", "Aprender historia", "Ganar dinero"], correcta: 0 },
+      { pregunta: "¿Cuántos puntos sumas por cada respuesta acertada?", opciones: ["50 pts", "100 pts", "200 pts", "500 pts"], correcta: 2 },
+      { pregunta: "¿Cuántos puntos sumas por error o tiempo agotado?", opciones: ["0 pts", "50 pts", "100 pts", "200 pts"], correcta: 2 },
+      { pregunta: "¿Qué efecto tienen las estrellas en la bola de disco?", opciones: ["Giran y destellan", "Se caen", "Cambian a negro", "Explotan"], correcta: 0 },
+      { pregunta: "¿Qué sentimiento define este tercer aniversario?", opciones: ["Amor infinito", "Aburrimiento", "Duda", "Distancia"], correcta: 0 },
+      { pregunta: "¿Hacia qué lado se desplaza el cartel de felicitaciones?", opciones: ["De abajo hacia arriba", "De derecha a izquierda", "De izquierda a derecha", "No se mueve"], correcta: 1 },
+      { pregunta: "¿Qué música imaginas sonando de fondo en esta fiesta?", opciones: ["Sintetizadores ochenteros", "Silencio total", "Música clásica triste", "Sonidos de lluvia"], correcta: 0 },
+      { pregunta: "¿Qué promete el futuro después de estos 3 años?", opciones: ["Muchos más momentos increíbles", "El final del juego", "Nada nuevo", "Separación"], correcta: 0 }
+    ];
+
+    let preguntasPartida = [];
+    let indiceActual = 0;
+
+    function barajarArray(array) {
+      const copia = [...array];
+      for (let i = copia.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copia[i], copia[j]] = [copia[j], copia[i]];
+      }
+      return copia;
+    }
+
+    function iniciarTrivia() {
+      const btnCancelar = document.getElementById('btn-cancelar-desafio');
+      if (btnCancelar) btnCancelar.classList.add('oculto');
+
+      preguntasPartida = barajarArray(todasLasPreguntas).slice(0, 10);
+      indiceActual = 0;
+      puntaje = 0;
+      document.getElementById('modal-trivia').classList.remove('oculto');
+      cargarPregunta();
+    }
+
+    function cerrarTrivia() {
+      clearInterval(temporizador);
+      document.getElementById('modal-trivia').classList.add('oculto');
+    }
+
+    function cargarPregunta() {
+      clearInterval(temporizador);
+
+      if (indiceActual >= preguntasPartida.length) {
+        mostrarResultadoFinal();
+        return;
+      }
+
+      tiempoRestante = 15;
+      actualizarHUD();
+
+      const q = preguntasPartida[indiceActual];
+      document.getElementById('t-num').innerText = `PREGUNTA ${indiceActual + 1}/${preguntasPartida.length}`;
+      document.getElementById('t-question').innerText = q.pregunta;
+
+      const contOpciones = document.getElementById('t-options');
+      contOpciones.innerHTML = '';
+
+      q.opciones.forEach((texto, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-trivia-opt';
+        btn.innerText = `${i + 1}. ${texto}`;
+        btn.onclick = () => responder(i);
+        contOpciones.appendChild(btn);
+      });
+
+      temporizador = setInterval(() => {
+        tiempoRestante--;
+        actualizarHUD();
+
+        if (tiempoRestante <= 0) {
+          clearInterval(temporizador);
+          puntaje += 100;
+          indiceActual++;
+          cargarPregunta();
+        }
+      }, 1000);
+    }
+
+    function responder(indiceSeleccionado) {
+      clearInterval(temporizador);
+      const q = preguntasPartida[indiceActual];
+
+      if (indiceSeleccionado === q.correcta) {
+        puntaje += 200;
+      } else {
+        puntaje += 100;
+      }
+
+      indiceActual++;
+      cargarPregunta();
+    }
+
+    function actualizarHUD() {
+      document.getElementById('t-time').innerText = `⏱ ${tiempoRestante}s`;
+      document.getElementById('t-score').innerText = `SCORE: ${puntaje}`;
+    }
+
+    function mostrarResultadoFinal() {
+      clearInterval(temporizador);
+
+      const btnCancelar = document.getElementById('btn-cancelar-desafio');
+      if (btnCancelar) btnCancelar.classList.add('oculto');
+
+      const uData = leerDatosUsuario();
+      uData.ultimoPuntaje = puntaje;
+      if (puntaje > (uData.record || 0)) {
+        uData.record = puntaje;
+      }
+      guardarDatosUsuario(uData);
+
+      document.getElementById('t-num').innerText = "DESAFÍO COMPLETADO";
+      document.getElementById('t-time').innerText = "🏁 FIN";
+      document.getElementById('t-score').innerText = `TOTAL: ${puntaje} PTS`;
+      document.getElementById('t-question').innerHTML = `
+        ¡Completaste las 10 preguntas!<br>
+        <span style="color:#ffe600; font-size:1.3rem;">Puntaje: ${puntaje} pts</span><br>
+        <span style="color:#00f0ff; font-size:0.95rem;">🏆 Récord Guardado: ${uData.record} pts</span>
+      `;
+
+      const contOpciones = document.getElementById('t-options');
+      contOpciones.innerHTML = `
+        <button class="btn-trivia-opt" style="text-align:center;" onclick="iniciarTrivia()">🔄 Repetir Desafío</button>
+        <button class="btn-trivia-opt" style="text-align:center;" onclick="cerrarTrivia()">✦ Estoy satisfecha con mi puntaje</button>
+      `;
+    }
+  </script>
+
+</body>
+</html>
