@@ -477,7 +477,7 @@
             heartsContainer.appendChild(h);
         }
 
-        // --- PREGUNTAS (El orden de las preguntas NO cambia, pero sus respuestas se desordenan aleatoriamente) ---
+    
         const questions = [
             {
                 title: "Pregunta 1 de 5",
@@ -568,7 +568,6 @@
             const container = document.getElementById('quiz-options');
             container.innerHTML = '';
 
-            // Clonar y barajar aleatoriamente el orden de las respuestas de esta pregunta
             let shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
 
             shuffledOptions.forEach((opt) => {
@@ -594,7 +593,7 @@
                         showDialogue(msg, () => {
                             showEnding();
                         });
-                    } else { // Preguntas 1, 2 y 3
+                    } else { 
                         if (opt.correct) {
                             currentQuestion++;
                             loadQuestion();
